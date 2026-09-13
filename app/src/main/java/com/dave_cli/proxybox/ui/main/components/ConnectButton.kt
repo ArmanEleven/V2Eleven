@@ -1,7 +1,11 @@
 package com.dave_cli.proxybox.ui.main.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -54,138 +58,286 @@ fun ConnectSection(
 ) {
     val isConnected = vpnState == VpnState.CONNECTED
     val isConnecting = vpnState == VpnState.CONNECTING
+    val isError = vpnState == VpnState.ERROR
+
+    val infiniteTransition = rememberInfiniteTransition(label = "connectionPulse")
+
+    val pulse by infiniteTransition.animateFloat(
+        initialValue = 0.85f,
+        targetValue = 1.15f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1100),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulse"
+    )
 
     val iconColor by animateColorAsState(
-        when {
+        targetValue = when {
             isConnected -> C.Green
-            isConnecting -> C.Primary
-            else -> Color(0xFF555555)
+            isConnecting -> C.PrimaryGlow
+            isError -> C.Red
+            else -> C.TextDim
         },
-        label = "icon"
+        animationSpec = tween(350),
+        label = "iconColor"
     )
+
     val borderColor by animateColorAsState(
-        when {
+        targetValue = when {
             isConnected -> C.Green
-            isConnecting -> C.Primary
-            else -> Color(0xFF333333)
+            isConnecting -> C.PrimaryGlow
+            isError -> C.Red
+            else -> C.Border
         },
-        label = "border"
+        animationSpec = tween(400),
+        label = "borderColor"
     )
+
     val glowAlpha by animateFloatAsState(
-        if (isConnected) 0.12f else 0f,
-        animationSpec = tween(600),
-        label = "glow"
+        targetValue = when {
+            isConnected -> 0.32f
+            isConnecting -> 0.20f
+            isError -> 0.14f
+            else -> 0f
+        },
+        animationSpec = tween(500),
+        label = "glowAlpha"
     )
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 18.dp, bottom = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Power button
+
+        // Main connection button
         Box(
             modifier = Modifier
-                .size(130.dp)
+                .size(154.dp)
                 .drawBehind {
                     if (glowAlpha > 0f) {
+                        val extra = if (isConnected || isConnecting) {
+                            18.dp.toPx() * pulse
+                        } else {
+                            12.dp.toPx()
+                        }
+
                         drawCircle(
-                            color = Color(0xFF4ADE80),
-                            radius = size.minDimension / 2 + 14.dp.toPx(),
+                            color = when {
+                                isConnected -> C.Green
+                                isConnecting -> C.Primary
+                                else -> C.Red
+                            },
+                            radius = size.minDimension / 2f + extra,
                             alpha = glowAlpha
                         )
+
+                        if (isConnected || isConnecting) {
+                            drawCircle(
+                                color = when {
+                                    isConnected -> C.Green
+                                    else -> C.PrimaryGlow
+                                },
+                                radius = size.minDimension / 2f + extra * 1.8f,
+                                alpha = glowAlpha * 0.22f
+                            )
+                        }
                     }
                 }
                 .clip(CircleShape)
-                .border(2.5.dp, borderColor, CircleShape)
-                .background(
-                    if (isConnected)
-                        Brush.radialGradient(listOf(Color(0xFF0F2A1A), Color(0xFF0A1A10)))
-                    else
-                        Brush.radialGradient(listOf(Color(0xFF1E1E3A), Color(0xFF12122A)))
+                .border(
+                    width = if (isConnected || isConnecting) 3.dp else 2.dp,
+                    color = borderColor,
+                    shape = CircleShape
                 )
-                .clickable(enabled = !isConnecting) { onToggle() },
+                .background(
+                    brush = when {
+                        isConnected -> Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFF321014),
+                                Color(0xFF18090C),
+                                Color(0xFF090608)
+                            )
+                        )
+
+                        isConnecting -> Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFF3A0B10),
+                                Color(0xFF19070A),
+                                Color(0xFF080608)
+                            )
+                        )
+
+                        isError -> Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFF2A080C),
+                                Color(0xFF140609),
+                                Color(0xFF080608)
+                            )
+                        )
+
+                        else -> Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFF211014),
+                                Color(0xFF12090B),
+                                Color(0xFF070608)
+                            )
+                        )
+                    }
+                )
+                .clickable(enabled = !isConnecting) {
+                    onToggle()
+                },
             contentAlignment = Alignment.Center
         ) {
-            PowerIcon(color = iconColor, modifier = Modifier.size(48.dp))
+            PowerIcon(
+                color = iconColor,
+                modifier = Modifier.size(55.dp),
+                glow = isConnected || isConnecting
+            )
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(18.dp))
 
-        // Status row: left column (status + duration) — right column (speed test)
+        // Connection state
+        Text(
+            text = when {
+                isConnected -> stringResource(R.string.connected)
+                isConnecting -> stringResource(R.string.connecting)
+                isError -> stringResource(R.string.connection_failed)
+                else -> stringResource(R.string.not_connected)
+            },
+            color = when {
+                isConnected -> C.Green
+                isConnecting -> C.PrimaryGlow
+                isError -> C.Red
+                else -> C.TextSecondary
+            },
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 1.sp
+        )
+
         if (isConnected) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Left: status + profile + duration
-                Column {
-                    Text(
-                        stringResource(R.string.connected),
-                        color = C.Green,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = CoreService.activeProfileName ?: "",
-                        color = C.GreenDark,
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 2.dp)
-                    )
-                    ConnectionDuration()
-                }
-                // Right: speed test
-                SpeedTestChip(onSpeedTest = onSpeedTest)
-            }
-        } else {
-            // Centered status when not connected
-            Text(
-                text = when (vpnState) {
-                    VpnState.CONNECTING -> stringResource(R.string.connecting)
-                    VpnState.ERROR -> stringResource(R.string.connection_failed)
-                    else -> stringResource(R.string.not_connected)
-                },
-                color = when (vpnState) {
-                    VpnState.ERROR -> C.Red
-                    else -> Color(0xFF666666)
-                },
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium
+            ConnectedInfo(
+                onSpeedTest = onSpeedTest
             )
-            if (!isConnecting && vpnState != VpnState.ERROR) {
+        } else {
+            if (!isConnecting && !isError) {
                 Text(
-                    stringResource(R.string.tap_to_connect), color = Color(0xFF444444), fontSize = 12.sp,
-                    modifier = Modifier.padding(top = 4.dp)
+                    text = stringResource(R.string.tap_to_connect),
+                    color = C.TextDim,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 5.dp)
                 )
             }
-            // Speed test centered when disconnected
-            SpeedTestChip(onSpeedTest = onSpeedTest)
+
+            SpeedTestChip(
+                onSpeedTest = onSpeedTest
+            )
         }
     }
 }
 
 @Composable
-private fun PowerIcon(color: Color, modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val strokeW = 3.5.dp.toPx()
-        val cx = size.width / 2
-        val cy = size.height / 2
-        val r = size.minDimension / 2 - strokeW
+private fun ConnectedInfo(
+    onSpeedTest: ((Double?, String?) -> Unit) -> Unit,
+) {
+    val profileName = CoreService.activeProfileName ?: ""
 
-        // Arc — gap at top (30° each side of 270°)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        if (profileName.isNotBlank()) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 7.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(C.Surface.copy(alpha = 0.85f))
+                    .border(
+                        width = 1.dp,
+                        color = C.Border,
+                        shape = RoundedCornerShape(50)
+                    )
+                    .padding(horizontal = 14.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(7.dp)
+                        .background(C.Green, CircleShape)
+                )
+
+                Spacer(Modifier.width(7.dp))
+
+                Text(
+                    text = profileName,
+                    color = C.TextPrimary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+
+        ConnectionDuration()
+
+        Spacer(Modifier.height(2.dp))
+
+        SpeedTestChip(
+            onSpeedTest = onSpeedTest
+        )
+    }
+}
+
+@Composable
+private fun PowerIcon(
+    color: Color,
+    modifier: Modifier = Modifier,
+    glow: Boolean = false,
+) {
+    Canvas(modifier = modifier) {
+        val strokeW = 4.dp.toPx()
+        val cx = size.width / 2f
+        val cy = size.height / 2f
+        val r = size.minDimension / 2f - strokeW * 1.2f
+
+        if (glow) {
+            drawArc(
+                color = color.copy(alpha = 0.18f),
+                startAngle = -60f,
+                sweepAngle = 300f,
+                useCenter = false,
+                style = Stroke(
+                    width = strokeW * 3f,
+                    cap = StrokeCap.Round
+                ),
+                topLeft = Offset(cx - r, cy - r),
+                size = Size(r * 2f, r * 2f)
+            )
+        }
+
         drawArc(
             color = color,
             startAngle = -60f,
             sweepAngle = 300f,
             useCenter = false,
-            style = Stroke(width = strokeW, cap = StrokeCap.Round),
+            style = Stroke(
+                width = strokeW,
+                cap = StrokeCap.Round
+            ),
             topLeft = Offset(cx - r, cy - r),
-            size = Size(r * 2, r * 2)
+            size = Size(r * 2f, r * 2f)
         )
-        // Vertical stem
-        val stemTop = cy - r - strokeW * 0.3f
-        val stemBottom = cy - r * 0.05f
+
+        val stemTop = cy - r - strokeW * 0.15f
+        val stemBottom = cy - r * 0.02f
+
         drawLine(
             color = color,
             start = Offset(cx, stemBottom),
@@ -199,6 +351,7 @@ private fun PowerIcon(color: Color, modifier: Modifier = Modifier) {
 @Composable
 private fun ConnectionDuration() {
     val startTime = CoreService.connectionStartTime
+
     if (startTime <= 0L) return
 
     var elapsed by remember { mutableStateOf(0L) }
@@ -210,13 +363,28 @@ private fun ConnectionDuration() {
         }
     }
 
-    Column(modifier = Modifier.padding(top = 6.dp)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(top = 9.dp)
+    ) {
         Text(
-            String.format("%02d:%02d:%02d", elapsed / 3600, (elapsed % 3600) / 60, elapsed % 60),
-            color = C.TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.SemiBold
+            text = String.format(
+                "%02d:%02d:%02d",
+                elapsed / 3600,
+                (elapsed % 3600) / 60,
+                elapsed % 60
+            ),
+            color = C.TextPrimary,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold
         )
-        Text(stringResource(R.string.duration), color = Color(0xFF555555), fontSize = 11.sp,
-            modifier = Modifier.padding(top = 1.dp))
+
+        Text(
+            text = stringResource(R.string.duration),
+            color = C.TextDim,
+            fontSize = 10.sp,
+            modifier = Modifier.padding(top = 1.dp)
+        )
     }
 }
 
@@ -230,67 +398,112 @@ private fun SpeedTestChip(
 
     val chipModifier = Modifier
         .padding(top = 10.dp)
-        .clip(RoundedCornerShape(8.dp))
-        .background(C.Surface)
-
-    if (isTesting) {
-        Box(modifier = chipModifier.padding(horizontal = 14.dp, vertical = 8.dp)) {
-            Text(stringResource(R.string.testing), color = C.TextSecondary, fontSize = 13.sp)
-        }
-    } else if (speedMbps != null) {
-        Row(
-            modifier = chipModifier
-                .clickable {
-                    isTesting = true
-                    onSpeedTest { mbps, err ->
-                        speedMbps = mbps
-                        speedError = err
-                        isTesting = false
-                    }
-                }
-                .padding(horizontal = 14.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                stringResource(R.string.speed_result_mbps, speedMbps!!),
-                color = C.Green,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium
+        .clip(RoundedCornerShape(10.dp))
+        .background(
+            Brush.horizontalGradient(
+                colors = listOf(
+                    C.SurfaceVariant,
+                    C.Surface
+                )
             )
-            Spacer(Modifier.width(8.dp))
-            Text("\u21BB", color = C.TextSecondary, fontSize = 16.sp)
+        )
+        .border(
+            width = 1.dp,
+            color = C.Border,
+            shape = RoundedCornerShape(10.dp)
+        )
+
+    fun runTest() {
+        isTesting = true
+        speedError = null
+
+        onSpeedTest { mbps, err ->
+            speedMbps = mbps
+            speedError = err
+            isTesting = false
         }
-    } else if (speedError != null) {
-        Box(
-            modifier = chipModifier
-                .clickable {
-                    isTesting = true
-                    speedError = null
-                    onSpeedTest { mbps, err ->
-                        speedMbps = mbps
-                        speedError = err
-                        isTesting = false
-                    }
-                }
-                .padding(horizontal = 14.dp, vertical = 8.dp)
-        ) {
-            Text("${stringResource(R.string.speed_failed)} \u21BB", color = C.Red, fontSize = 13.sp)
+    }
+
+    when {
+        isTesting -> {
+            Box(
+                modifier = chipModifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 9.dp
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.testing),
+                    color = C.PrimaryGlow,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
-    } else {
-        Box(
-            modifier = chipModifier
-                .clickable {
-                    isTesting = true
-                    onSpeedTest { mbps, err ->
-                        speedMbps = mbps
-                        speedError = err
-                        isTesting = false
-                    }
-                }
-                .padding(horizontal = 14.dp, vertical = 8.dp)
-        ) {
-            Text("\u26A1 ${stringResource(R.string.speed_test)}", color = C.Amber, fontSize = 13.sp,
-                fontWeight = FontWeight.Medium)
+
+        speedMbps != null -> {
+            Row(
+                modifier = chipModifier
+                    .clickable { runTest() }
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 8.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.speed_result_mbps,
+                        speedMbps!!
+                    ),
+                    color = C.Green,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Text(
+                    text = "\u21BB",
+                    color = C.TextSecondary,
+                    fontSize = 15.sp
+                )
+            }
+        }
+
+        speedError != null -> {
+            Box(
+                modifier = chipModifier
+                    .clickable { runTest() }
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 8.dp
+                    )
+            ) {
+                Text(
+                    text = "${stringResource(R.string.speed_failed)} \u21BB",
+                    color = C.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+
+        else -> {
+            Box(
+                modifier = chipModifier
+                    .clickable { runTest() }
+                    .padding(
+                        horizontal = 15.dp,
+                        vertical = 9.dp
+                    )
+            ) {
+                Text(
+                    text = "\u26A1 ${stringResource(R.string.speed_test)}",
+                    color = C.Amber,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }

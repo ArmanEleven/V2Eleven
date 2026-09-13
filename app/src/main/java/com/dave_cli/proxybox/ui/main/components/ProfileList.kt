@@ -32,6 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -58,36 +60,85 @@ fun ProfileList(
 
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        contentPadding = PaddingValues(
+            horizontal = 14.dp,
+            vertical = 6.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(profiles, key = { it.id }) { profile ->
+        items(
+            profiles,
+            key = { it.id }
+        ) { profile ->
+
             ProfileCard(
                 profile = profile,
                 isMenuOpen = menuOpenId == profile.id,
-                onSelect = { onSelect(profile.id) },
-                onMenuToggle = { onMenuToggle(profile.id) },
+
+                onSelect = {
+                    onSelect(profile.id)
+                },
+
+                onMenuToggle = {
+                    onMenuToggle(profile.id)
+                },
+
                 onMenuDismiss = onMenuDismiss,
-                onRename = { onRename(profile) },
+
+                onRename = {
+                    onRename(profile)
+                },
+
                 onCopyConfig = {
                     onMenuDismiss()
-                    val text = profile.rawUri.ifBlank { profile.configJson }
-                    val cb = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    cb.setPrimaryClip(ClipData.newPlainText("config", text))
-                    Toast.makeText(context, context.getString(R.string.config_copied), Toast.LENGTH_SHORT).show()
+
+                    val text = profile.rawUri.ifBlank {
+                        profile.configJson
+                    }
+
+                    val clipboard =
+                        context.getSystemService(
+                            Context.CLIPBOARD_SERVICE
+                        ) as ClipboardManager
+
+                    clipboard.setPrimaryClip(
+                        ClipData.newPlainText(
+                            "config",
+                            text
+                        )
+                    )
+
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.config_copied),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 },
+
                 onShare = {
                     onMenuDismiss()
-                    val text = profile.rawUri.ifBlank { profile.configJson }
+
+                    val text = profile.rawUri.ifBlank {
+                        profile.configJson
+                    }
+
                     val intent = Intent.createChooser(
                         Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, text)
-                        }, context.getString(R.string.share_config)
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                text
+                            )
+                        },
+                        context.getString(R.string.share_config)
                     )
+
                     context.startActivity(intent)
                 },
-                onDelete = { onDelete(profile) },
+
+                onDelete = {
+                    onDelete(profile)
+                }
             )
         }
     }
@@ -108,107 +159,284 @@ private fun ProfileCard(
 ) {
     val selected = profile.isSelected
 
+    val pingColor = when {
+        profile.latencyMs <= 0 -> C.TextDim
+        profile.latencyMs < 60 -> C.Green
+        profile.latencyMs < 100 -> Color(0xFF86EFAC)
+        profile.latencyMs < 150 -> C.Yellow
+        else -> C.Red
+    }
+
+    val cardBackground = if (selected) {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFF26090D),
+                Color(0xFF17090C),
+                Color(0xFF10080A)
+            )
+        )
+    } else {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFF160A0D),
+                Color(0xFF10080A)
+            )
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(if (selected) Color(0xFF1A1A38) else C.Surface)
-            .then(
-                if (selected)
-                    Modifier.border(2.dp, C.Primary, RoundedCornerShape(14.dp))
-                else Modifier
+            .drawBehind {
+                if (selected) {
+                    drawRoundRect(
+                        color = C.Primary.copy(alpha = 0.13f),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                            16.dp.toPx()
+                        )
+                    )
+                }
+            }
+            .clip(RoundedCornerShape(16.dp))
+            .background(cardBackground)
+            .border(
+                width = if (selected) 1.5.dp else 1.dp,
+                color = if (selected) {
+                    C.Primary.copy(alpha = 0.75f)
+                } else {
+                    C.Border
+                },
+                shape = RoundedCornerShape(16.dp)
             )
             .combinedClickable(
                 onClick = onSelect,
-                onLongClick = onMenuToggle,
+                onLongClick = onMenuToggle
             )
-            .padding(14.dp),
+            .padding(
+                start = 14.dp,
+                top = 13.dp,
+                end = 8.dp,
+                bottom = 13.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Radio
+
+        // Connection indicator
         Box(
             modifier = Modifier
-                .size(20.dp)
+                .size(38.dp)
                 .clip(CircleShape)
-                .border(2.dp, if (selected) C.Primary else Color(0xFF444444), CircleShape)
-                .then(if (selected) Modifier.background(C.Primary, CircleShape) else Modifier),
+                .background(
+                    if (selected) {
+                        C.Primary.copy(alpha = 0.16f)
+                    } else {
+                        C.SurfaceVariant
+                    }
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (selected) {
+                        C.Primary.copy(alpha = 0.55f)
+                    } else {
+                        C.Border
+                    },
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
-            if (selected) {
-                Box(
-                    Modifier
-                        .size(8.dp)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .size(
+                        if (selected) 10.dp else 8.dp
+                    )
+                    .background(
+                        if (selected) C.Primary else C.TextDim,
+                        CircleShape
+                    )
+            )
         }
 
-        Spacer(Modifier.width(14.dp))
+        Spacer(
+            modifier = Modifier.width(12.dp)
+        )
 
-        // Info
-        Column(modifier = Modifier.weight(1f)) {
+        // Server information
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+
             Text(
                 text = profile.name,
                 color = C.TextPrimary,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = if (selected) {
+                    FontWeight.SemiBold
+                } else {
+                    FontWeight.Medium
+                },
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
-            Row(modifier = Modifier.padding(top = 3.dp)) {
-                Text(
-                    text = profile.protocol.uppercase(),
-                    color = C.Primary,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium,
-                )
-                if (profile.latencyMs > 0) {
-                    Spacer(Modifier.width(10.dp))
+
+            Row(
+                modifier = Modifier.padding(top = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                // Protocol badge
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(6.dp)
+                        )
+                        .background(
+                            C.Primary.copy(alpha = 0.12f)
+                        )
+                        .padding(
+                            horizontal = 7.dp,
+                            vertical = 3.dp
+                        )
+                ) {
                     Text(
-                        text = "${profile.latencyMs}ms",
-                        color = when {
-                            profile.latencyMs < 200 -> C.Green
-                            profile.latencyMs < 500 -> C.Yellow
-                            else -> C.Red
-                        },
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Medium,
+                        text = profile.protocol.uppercase(),
+                        color = C.PrimaryGlow,
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.7.sp
+                    )
+                }
+
+                if (profile.latencyMs > 0) {
+
+                    Spacer(
+                        modifier = Modifier.width(8.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(5.dp)
+                            .background(
+                                pingColor,
+                                CircleShape
+                            )
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(4.dp)
+                    )
+
+                    Text(
+                        text = "${profile.latencyMs} ms",
+                        color = pingColor,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
         }
 
-        // Menu button
+        // Selected indicator
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .size(9.dp)
+                    .background(
+                        C.Green,
+                        CircleShape
+                    )
+            )
+
+            Spacer(
+                modifier = Modifier.width(8.dp)
+            )
+        }
+
+        // Menu
         Box {
+
             Text(
                 text = "\u22EE",
-                color = Color(0xFF555555),
-                fontSize = 18.sp,
+                color = C.TextDim,
+                fontSize = 20.sp,
                 modifier = Modifier
-                    .clickable(onClick = onMenuToggle)
-                    .padding(8.dp)
+                    .clickable(
+                        onClick = onMenuToggle
+                    )
+                    .padding(
+                        horizontal = 7.dp,
+                        vertical = 7.dp
+                    )
             )
+
             DropdownMenu(
                 expanded = isMenuOpen,
-                onDismissRequest = onMenuDismiss,
+                onDismissRequest = onMenuDismiss
             ) {
+
                 DropdownMenuItem(
-                    text = { Text("\u270F\uFE0F  ${stringResource(R.string.rename)}", color = C.TextPrimary) },
-                    onClick = { onMenuDismiss(); onRename() },
+                    text = {
+                        Text(
+                            "\u270F\uFE0F  ${
+                                stringResource(
+                                    R.string.rename
+                                )
+                            }",
+                            color = C.TextPrimary
+                        )
+                    },
+                    onClick = {
+                        onMenuDismiss()
+                        onRename()
+                    }
                 )
+
                 DropdownMenuItem(
-                    text = { Text("\uD83D\uDCCB  ${stringResource(R.string.copy_config)}", color = C.TextPrimary) },
-                    onClick = onCopyConfig,
+                    text = {
+                        Text(
+                            "\uD83D\uDCCB  ${
+                                stringResource(
+                                    R.string.copy_config
+                                )
+                            }",
+                            color = C.TextPrimary
+                        )
+                    },
+                    onClick = onCopyConfig
                 )
+
                 DropdownMenuItem(
-                    text = { Text("\uD83D\uDCE4  ${stringResource(R.string.share)}", color = C.TextPrimary) },
-                    onClick = onShare,
+                    text = {
+                        Text(
+                            "\uD83D\uDCE4  ${
+                                stringResource(
+                                    R.string.share
+                                )
+                            }",
+                            color = C.TextPrimary
+                        )
+                    },
+                    onClick = onShare
                 )
-                Divider(color = C.Border)
+
+                Divider(
+                    color = C.Border
+                )
+
                 DropdownMenuItem(
-                    text = { Text("\uD83D\uDDD1  ${stringResource(R.string.delete)}", color = C.Red) },
-                    onClick = { onMenuDismiss(); onDelete() },
+                    text = {
+                        Text(
+                            "\uD83D\uDDD1  ${
+                                stringResource(
+                                    R.string.delete
+                                )
+                            }",
+                            color = C.Red
+                        )
+                    },
+                    onClick = {
+                        onMenuDismiss()
+                        onDelete()
+                    }
                 )
             }
         }
