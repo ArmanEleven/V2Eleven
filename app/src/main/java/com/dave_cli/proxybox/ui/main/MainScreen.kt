@@ -1,8 +1,7 @@
-package com.dave_cli.proxybox.ui.main
+﻿package com.dave_cli.proxybox.ui.main
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -56,6 +53,71 @@ import com.dave_cli.proxybox.ui.main.components.ToolsSection
 import com.dave_cli.proxybox.ui.main.theme.C
 import kotlinx.coroutines.delay
 
+
+@Composable
+private fun UpsideDownBackground() {
+    Canvas(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        drawRect(
+            brush = C.UpsideDownGradient,
+            size = size
+        )
+
+        drawCircle(
+            brush = C.RedGlow,
+            radius = size.width * 0.9f,
+            center = androidx.compose.ui.geometry.Offset(
+                size.width * 0.5f,
+                size.height * 0.30f
+            )
+        )
+
+        drawCircle(
+            brush = C.RedGlow,
+            radius = size.width * 0.65f,
+            center = androidx.compose.ui.geometry.Offset(
+                size.width * 0.15f,
+                size.height * 0.88f
+            )
+        )
+
+        val lightning1 = listOf(
+            androidx.compose.ui.geometry.Offset(size.width * 0.18f, 0f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.27f, size.height * 0.10f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.22f, size.height * 0.18f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.34f, size.height * 0.29f)
+        )
+
+        val lightning2 = listOf(
+            androidx.compose.ui.geometry.Offset(size.width * 0.78f, 0f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.70f, size.height * 0.11f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.76f, size.height * 0.20f),
+            androidx.compose.ui.geometry.Offset(size.width * 0.62f, size.height * 0.32f)
+        )
+
+        for (i in 0 until 3) {
+            drawLine(
+                color = Color(0x55FF3344),
+                start = lightning1[i],
+                end = lightning1[i + 1],
+                strokeWidth = 3f
+            )
+
+            drawLine(
+                color = Color(0x55FF3344),
+                start = lightning2[i],
+                end = lightning2[i + 1],
+                strokeWidth = 3f
+            )
+        }
+
+        drawRect(
+            color = Color(0x44000000),
+            size = size
+        )
+    }
+}
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
