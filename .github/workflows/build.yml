@@ -1,4 +1,4 @@
-﻿name: Build V2ElevenProxyBox APK
+name: Build V2ElevenProxyBox APK
 
 on:
   workflow_dispatch:
