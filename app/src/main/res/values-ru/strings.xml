@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProxyBox</string>
+    <string name="app_name">V2ELEVEN</string>
     <string name="widget_description">Переключение VPN</string>
     <string name="widget_small_description">Кнопка вкл/выкл VPN</string>
 
