@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.import_config
+package ir.armaneleven.v2eleven.import_config
 
 import android.graphics.Bitmap
 import com.google.zxing.BinaryBitmap
