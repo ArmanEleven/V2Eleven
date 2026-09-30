@@ -1,10 +1,10 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.dave_cli.proxybox.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.db.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
