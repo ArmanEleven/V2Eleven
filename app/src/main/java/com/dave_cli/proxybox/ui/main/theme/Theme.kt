@@ -1,4 +1,4 @@
-﻿package com.dave_cli.proxybox.ui.main.theme
+﻿package ir.armaneleven.v2eleven.ui.main.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -63,7 +63,7 @@ private val DarkScheme = darkColorScheme(
 )
 
 @Composable
-fun ProxyBoxTheme(content: @Composable () -> Unit) {
+fun V2ElevenTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = DarkScheme,
         content = content
