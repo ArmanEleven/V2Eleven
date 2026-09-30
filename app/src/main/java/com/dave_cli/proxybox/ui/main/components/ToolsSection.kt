@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main.components
+package ir.armaneleven.v2eleven.ui.main.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.RoutingPreset
-import com.dave_cli.proxybox.core.RoutingPresets
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.RoutingPreset
+import ir.armaneleven.v2eleven.core.RoutingPresets
+import ir.armaneleven.v2eleven.ui.main.theme.C
 
 @Composable
 fun ToolsSection(
