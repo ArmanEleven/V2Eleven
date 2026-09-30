@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main
+package ir.armaneleven.v2eleven.ui.main
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -47,9 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.CoreService
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.CoreService
+import ir.armaneleven.v2eleven.ui.main.theme.C
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
