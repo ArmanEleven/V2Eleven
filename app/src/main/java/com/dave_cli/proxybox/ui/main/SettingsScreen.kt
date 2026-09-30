@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main
+package ir.armaneleven.v2eleven.ui.main
 
 import android.content.Context
 import android.content.Intent
@@ -49,12 +49,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.dave_cli.proxybox.BuildConfig
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.GeoProfile
-import com.dave_cli.proxybox.core.LocaleHelper
-import com.dave_cli.proxybox.core.UpdateResult
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.BuildConfig
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.GeoProfile
+import ir.armaneleven.v2eleven.core.LocaleHelper
+import ir.armaneleven.v2eleven.core.UpdateResult
+import ir.armaneleven.v2eleven.ui.main.theme.C
 
 @Composable
 fun SettingsScreen(
