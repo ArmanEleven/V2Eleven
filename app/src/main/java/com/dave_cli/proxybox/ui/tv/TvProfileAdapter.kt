@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.tv
+package ir.armaneleven.v2eleven.ui.tv
 
 import android.content.Context
 import android.graphics.Color
@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
 
 class TvProfileAdapter(
     context: Context,
