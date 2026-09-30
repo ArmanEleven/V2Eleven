@@ -1,8 +1,8 @@
-package com.dave_cli.proxybox.import_config
+package ir.armaneleven.v2eleven.import_config
 
 import android.net.Uri
 import android.util.Base64
-import com.dave_cli.proxybox.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.util.UUID
