@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox
+package ir.armaneleven.v2eleven
 
 import android.app.Application
 import android.util.Log
@@ -8,14 +8,14 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.dave_cli.proxybox.core.GeoFileManager
-import com.dave_cli.proxybox.core.GeoUpdateWorker
+import ir.armaneleven.v2eleven.core.GeoFileManager
+import ir.armaneleven.v2eleven.core.GeoUpdateWorker
 import java.util.concurrent.TimeUnit
 
-class ProxyBoxApp : Application() {
+class V2ElevenApp : Application() {
 
     companion object {
-        private const val TAG = "ProxyBoxApp"
+        private const val TAG = "V2ElevenApp"
         private const val STALE_THRESHOLD_MS = 3L * 24 * 60 * 60 * 1000 // 3 days
     }
 
