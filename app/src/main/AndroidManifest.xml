@@ -100,7 +100,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.dave_cli.proxybox.widget.TOGGLE_VPN" />
+                <action android:name="ir.armaneleven.v2eleven.widget.TOGGLE_VPN" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -113,7 +113,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.dave_cli.proxybox.widget.TOGGLE_VPN_SMALL" />
+                <action android:name="ir.armaneleven.v2eleven.widget.TOGGLE_VPN_SMALL" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
