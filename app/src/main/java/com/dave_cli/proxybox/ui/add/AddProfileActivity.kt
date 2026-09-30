@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.add
+package ir.armaneleven.v2eleven.ui.add
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -10,15 +10,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.dave_cli.proxybox.data.db.AppDatabase
-import com.dave_cli.proxybox.data.repository.ProfileRepository
-import com.dave_cli.proxybox.databinding.ActivityAddProfileBinding
-import com.dave_cli.proxybox.import_config.ConfigParser
-import com.dave_cli.proxybox.import_config.QrDecoder
+import ir.armaneleven.v2eleven.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.repository.ProfileRepository
+import ir.armaneleven.v2eleven.databinding.ActivityAddProfileBinding
+import ir.armaneleven.v2eleven.import_config.ConfigParser
+import ir.armaneleven.v2eleven.import_config.QrDecoder
 import android.content.Context
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.LocaleHelper
-import com.dave_cli.proxybox.ui.main.MainViewModel
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.LocaleHelper
+import ir.armaneleven.v2eleven.ui.main.MainViewModel
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.CoroutineScope
