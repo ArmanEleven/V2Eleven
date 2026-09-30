@@ -1,6 +1,6 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
-import com.dave_cli.proxybox.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
