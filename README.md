@@ -1,15 +1,15 @@
-# ProxyBox
+# V2 Eleven
 
 [![Русский](https://img.shields.io/badge/lang-Русский-blue)](README_ru.md)
 
 ![API](https://img.shields.io/badge/API-24%2B-brightgreen)
 ![License](https://img.shields.io/badge/License-GPLv3-blue)
-![GitHub release](https://img.shields.io/github/v/release/DaveBugg/ProxyBox)
-![Downloads](https://img.shields.io/github/downloads/DaveBugg/ProxyBox/total)
+![GitHub release](https://img.shields.io/github/v/release/DaveBugg/V2 Eleven)
+![Downloads](https://img.shields.io/github/downloads/DaveBugg/V2 Eleven/total)
 
 Open-source Android VPN client powered by [Xray-core](https://github.com/XTLS/Xray-core). Designed for both **mobile phones** and **Android TV / set-top boxes**.
 
-> **Why ProxyBox?** Full Android TV support with D-pad navigation, phone-to-TV config transfer via QR code, and a clean modern UI — features missing from most Xray clients.
+> **Why V2 Eleven?** Full Android TV support with D-pad navigation, phone-to-TV config transfer via QR code, and a clean modern UI — features missing from most Xray clients.
 
 ## Donate
 
@@ -53,7 +53,7 @@ If you find this project useful, consider supporting development:
 
 ## Security & Anti-Detection
 
-ProxyBox hardens the local proxy stack to minimize the attack surface and reduce VPN fingerprinting. Verified with [RKN Hardering](https://github.com/xtclovver/RKNHardering):
+V2 Eleven hardens the local proxy stack to minimize the attack surface and reduce VPN fingerprinting. Verified with [RKN Hardering](https://github.com/xtclovver/RKNHardering):
 
 - **Authenticated local SOCKS proxy** — per-session random credentials (user/pass) generated on every connect. Other apps on the device cannot use or detect the local proxy without knowing the password
 - **No HTTP proxy exposed** — only SOCKS inbound on localhost, no secondary HTTP listener
@@ -90,7 +90,7 @@ com.dave_cli.proxybox
 │   ├── tv/                     # Android TV UI (TvMainActivity, TvProfileAdapter)
 │   ├── add/                    # Add profile screen
 │   └── server/                 # Local server screen with QR display
-└── ProxyBoxApp.kt              # Application class (schedules geo updates)
+└── V2 ElevenApp.kt              # Application class (schedules geo updates)
 ```
 
 ## Requirements
@@ -102,8 +102,8 @@ com.dave_cli.proxybox
 
 ```bash
 # Clone the repository
-git clone https://github.com/DaveBugg/ProxyBox.git
-cd ProxyBox
+git clone https://github.com/DaveBugg/V2 Eleven.git
+cd V2 Eleven
 
 # Build debug APK
 ./gradlew assembleDebug
