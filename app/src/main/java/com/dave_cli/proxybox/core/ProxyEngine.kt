@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
 /**
  * Common interface for proxy engines.
