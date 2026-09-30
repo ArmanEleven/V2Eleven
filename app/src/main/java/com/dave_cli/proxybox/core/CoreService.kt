@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -15,10 +15,10 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.data.db.AppDatabase
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.ui.main.MainActivity
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.dave_cli.proxybox.widget.VpnWidgetProvider
+import ir.armaneleven.v2eleven.widget.VpnWidgetProvider
 import java.security.SecureRandom
 
 class CoreService : VpnService() {
@@ -38,8 +38,8 @@ class CoreService : VpnService() {
         const val CHANNEL_ID = "proxybox_vpn"
         const val NOTIF_ID = 1
 
-        const val ACTION_START = "com.dave_cli.proxybox.START"
-        const val ACTION_STOP = "com.dave_cli.proxybox.STOP"
+        const val ACTION_START = "ir.armaneleven.v2eleven.START"
+        const val ACTION_STOP = "ir.armaneleven.v2eleven.STOP"
 
         private const val PRIVATE_VLAN4_CLIENT = "26.26.26.1"
         private const val PRIVATE_VLAN4_ROUTER = "26.26.26.2"
