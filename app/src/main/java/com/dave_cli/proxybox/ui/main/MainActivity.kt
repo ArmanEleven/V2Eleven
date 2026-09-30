@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main
+package ir.armaneleven.v2eleven.ui.main
 
 import android.app.Activity
 import android.app.UiModeManager
@@ -21,12 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.CoreService
-import com.dave_cli.proxybox.core.LocaleHelper
-import com.dave_cli.proxybox.ui.add.AddProfileActivity
-import com.dave_cli.proxybox.ui.main.theme.ProxyBoxTheme
-import com.dave_cli.proxybox.ui.tv.TvMainActivity
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.CoreService
+import ir.armaneleven.v2eleven.core.LocaleHelper
+import ir.armaneleven.v2eleven.ui.add.AddProfileActivity
+import ir.armaneleven.v2eleven.ui.main.theme.ProxyBoxTheme
+import ir.armaneleven.v2eleven.ui.tv.TvMainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -174,7 +174,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleWidgetIntent(intent: Intent) {
-        if (intent.action == com.dave_cli.proxybox.widget.VpnWidgetProvider.ACTION_CONNECT) {
+        if (intent.action == ir.armaneleven.v2eleven.widget.VpnWidgetProvider.ACTION_CONNECT) {
             if (!CoreService.isActive) {
                 pendingWidgetConnect = true
                 lifecycleScope.launch {
