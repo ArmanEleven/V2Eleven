@@ -11,7 +11,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace 'com.dave_cli.proxybox'
+    namespace 'ir.armaneleven.v2eleven'
     compileSdk 35
 
     if (keystorePropertiesFile.exists()) {
@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.dave_cli.proxybox"
+        applicationId "ir.armaneleven.v2eleven"
         minSdk 24
         targetSdk 35
         versionCode 20
