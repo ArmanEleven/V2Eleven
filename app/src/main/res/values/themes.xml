@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.ProxyBox" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.V2Eleven" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -9,7 +9,7 @@
         <item name="android:statusBarColor">#1A1A2E</item>
     </style>
 
-    <style name="Theme.ProxyBox.TV" parent="@style/Theme.Leanback.Browse">
+    <style name="Theme.V2Eleven.TV" parent="@style/Theme.Leanback.Browse">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
