@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Speed4You_3"
+rootProject.name = "V2Eleven"
 include ':app'
