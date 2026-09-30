@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main
+package ir.armaneleven.v2eleven.ui.main
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.databinding.ItemProfileBinding
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.databinding.ItemProfileBinding
 
 class ProfileAdapter(
     private val onSelect: (ProfileEntity) -> Unit,
