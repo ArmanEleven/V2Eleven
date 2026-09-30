@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.data.db
+package ir.armaneleven.v2eleven.data.db
 
 import androidx.room.Dao
 import androidx.room.Delete
