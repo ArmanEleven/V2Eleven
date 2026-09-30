@@ -1,20 +1,20 @@
-package com.dave_cli.proxybox.ui.main
+package ir.armaneleven.v2eleven.ui.main
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.IpCheckService
-import com.dave_cli.proxybox.core.RoutingPreset
-import com.dave_cli.proxybox.core.RoutingPresets
-import com.dave_cli.proxybox.core.UpdateChecker
-import com.dave_cli.proxybox.core.UpdateResult
-import com.dave_cli.proxybox.data.db.AppDatabase
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.data.db.RoutingRuleEntity
-import com.dave_cli.proxybox.data.db.SubscriptionEntity
-import com.dave_cli.proxybox.data.repository.ProfileRepository
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.IpCheckService
+import ir.armaneleven.v2eleven.core.RoutingPreset
+import ir.armaneleven.v2eleven.core.RoutingPresets
+import ir.armaneleven.v2eleven.core.UpdateChecker
+import ir.armaneleven.v2eleven.core.UpdateResult
+import ir.armaneleven.v2eleven.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.data.db.RoutingRuleEntity
+import ir.armaneleven.v2eleven.data.db.SubscriptionEntity
+import ir.armaneleven.v2eleven.data.repository.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.dave_cli.proxybox.core.CoreService
+import ir.armaneleven.v2eleven.core.CoreService
 import java.net.Authenticator
 import java.net.HttpURLConnection
 import java.net.InetSocketAddress
@@ -155,7 +155,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 return@launch
             }
             val result = withContext(Dispatchers.IO) {
-                com.dave_cli.proxybox.core.SpeedTestEngine.run(selected)
+                ir.armaneleven.v2eleven.core.SpeedTestEngine.run(selected)
             }
             onResult(result.downloadMbps, result.error)
         }
@@ -219,12 +219,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     // ─── Geo Profile ───────────────────────────────────────────────────
 
-    private val _geoProfile = MutableStateFlow(com.dave_cli.proxybox.core.GeoProfile.getSaved(getApplication()))
-    val geoProfile: StateFlow<com.dave_cli.proxybox.core.GeoProfile> = _geoProfile.asStateFlow()
+    private val _geoProfile = MutableStateFlow(ir.armaneleven.v2eleven.core.GeoProfile.getSaved(getApplication()))
+    val geoProfile: StateFlow<ir.armaneleven.v2eleven.core.GeoProfile> = _geoProfile.asStateFlow()
 
-    fun setGeoProfile(profile: com.dave_cli.proxybox.core.GeoProfile) {
-        com.dave_cli.proxybox.core.GeoProfile.save(getApplication(), profile)
-        com.dave_cli.proxybox.core.GeoFileManager.clearEtags(getApplication())
+    fun setGeoProfile(profile: ir.armaneleven.v2eleven.core.GeoProfile) {
+        ir.armaneleven.v2eleven.core.GeoProfile.save(getApplication(), profile)
+        ir.armaneleven.v2eleven.core.GeoFileManager.clearEtags(getApplication())
         _geoProfile.value = profile
         // Refresh active preset with new geo profile categories
         val presetId = prefs.getString("active_preset", "global") ?: "global"
@@ -246,7 +246,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val updated = com.dave_cli.proxybox.core.GeoFileManager.updateAll(
+                    val updated = ir.armaneleven.v2eleven.core.GeoFileManager.updateAll(
                         getApplication()
                     ) { fileName, bytesRead, totalBytes ->
                         val label = if (fileName == "geoip.dat") "GeoIP" else "GeoSite"
