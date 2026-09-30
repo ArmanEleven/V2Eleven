@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.widget
+package ir.armaneleven.v2eleven.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -7,14 +7,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.CoreService
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.CoreService
 
 class VpnWidgetProvider : AppWidgetProvider() {
 
     companion object {
-        const val ACTION_TOGGLE = "com.dave_cli.proxybox.widget.TOGGLE_VPN"
-        const val ACTION_CONNECT = "com.dave_cli.proxybox.CONNECT_VPN"
+        const val ACTION_TOGGLE = "ir.armaneleven.v2eleven.widget.TOGGLE_VPN"
+        const val ACTION_CONNECT = "ir.armaneleven.v2eleven.CONNECT_VPN"
 
         fun toggleVpn(context: Context) {
             if (CoreService.isActive) {
@@ -24,7 +24,7 @@ class VpnWidgetProvider : AppWidgetProvider() {
                 context.startService(stopIntent)
             } else {
                 // Launch MainActivity to handle VPN permission and connect
-                val launchIntent = Intent(context, com.dave_cli.proxybox.ui.main.MainActivity::class.java).apply {
+                val launchIntent = Intent(context, ir.armaneleven.v2eleven.ui.main.MainActivity::class.java).apply {
                     action = ACTION_CONNECT
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
