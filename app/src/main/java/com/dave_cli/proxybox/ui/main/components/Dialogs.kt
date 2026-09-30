@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main.components
+package ir.armaneleven.v2eleven.ui.main.components
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -37,10 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.data.db.RoutingRuleEntity
-import com.dave_cli.proxybox.ui.main.IpCheckResult
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.data.db.RoutingRuleEntity
+import ir.armaneleven.v2eleven.ui.main.IpCheckResult
+import ir.armaneleven.v2eleven.ui.main.theme.C
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ import kotlinx.coroutines.withContext
 // ---- Reusable text field ----
 
 @Composable
-fun ProxyBoxTextField(
+fun V2ElevenTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -93,7 +93,7 @@ fun RenameDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.rename_profile), color = C.TextPrimary) },
         text = {
-            ProxyBoxTextField(
+            V2ElevenTextField(
                 value = text,
                 onValueChange = { text = it },
                 placeholder = stringResource(R.string.profile_name_hint)
@@ -285,7 +285,7 @@ private fun ImportUrlDialog(onImport: (String) -> Unit, onDismiss: () -> Unit) {
         title = { Text(stringResource(R.string.import_rules_url), color = C.TextPrimary) },
         text = {
             Column {
-                ProxyBoxTextField(
+                V2ElevenTextField(
                     value = url,
                     onValueChange = { url = it; error = null },
                     placeholder = stringResource(R.string.url_placeholder)
@@ -333,7 +333,7 @@ private fun NameRuleDialog(onConfirm: (String) -> Unit, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.name_rule_set), color = C.TextPrimary) },
         text = {
-            ProxyBoxTextField(
+            V2ElevenTextField(
                 value = name,
                 onValueChange = { name = it },
                 placeholder = stringResource(R.string.rule_name_hint)
