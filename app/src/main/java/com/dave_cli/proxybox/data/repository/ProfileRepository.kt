@@ -1,12 +1,12 @@
-package com.dave_cli.proxybox.data.repository
+package ir.armaneleven.v2eleven.data.repository
 
-import com.dave_cli.proxybox.data.db.AppDatabase
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.data.db.RoutingRuleEntity
-import com.dave_cli.proxybox.data.db.SubscriptionEntity
-import com.dave_cli.proxybox.core.RoutingRuleValidator
-import com.dave_cli.proxybox.import_config.ConfigParser
-import com.dave_cli.proxybox.import_config.SubscriptionParser
+import ir.armaneleven.v2eleven.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.data.db.RoutingRuleEntity
+import ir.armaneleven.v2eleven.data.db.SubscriptionEntity
+import ir.armaneleven.v2eleven.core.RoutingRuleValidator
+import ir.armaneleven.v2eleven.import_config.ConfigParser
+import ir.armaneleven.v2eleven.import_config.SubscriptionParser
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
