@@ -1,4 +1,4 @@
-﻿package com.dave_cli.proxybox.ui.main
+﻿package ir.armaneleven.v2eleven.ui.main
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -39,18 +39,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.CoreService
-import com.dave_cli.proxybox.core.CoreService.VpnState
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.ui.main.components.ConnectSection
-import com.dave_cli.proxybox.ui.main.components.DeleteConfirmDialog
-import com.dave_cli.proxybox.ui.main.components.IpCheckDialog
-import com.dave_cli.proxybox.ui.main.components.ProfileList
-import com.dave_cli.proxybox.ui.main.components.RenameDialog
-import com.dave_cli.proxybox.ui.main.components.RulesDialog
-import com.dave_cli.proxybox.ui.main.components.ToolsSection
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.CoreService
+import ir.armaneleven.v2eleven.core.CoreService.VpnState
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.ui.main.components.ConnectSection
+import ir.armaneleven.v2eleven.ui.main.components.DeleteConfirmDialog
+import ir.armaneleven.v2eleven.ui.main.components.IpCheckDialog
+import ir.armaneleven.v2eleven.ui.main.components.ProfileList
+import ir.armaneleven.v2eleven.ui.main.components.RenameDialog
+import ir.armaneleven.v2eleven.ui.main.components.RulesDialog
+import ir.armaneleven.v2eleven.ui.main.components.ToolsSection
+import ir.armaneleven.v2eleven.ui.main.theme.C
 import kotlinx.coroutines.delay
 
 
