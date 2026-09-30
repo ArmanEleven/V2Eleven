@@ -1,14 +1,14 @@
-package com.dave_cli.proxybox.server
+package ir.armaneleven.v2eleven.server
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import android.util.Log
-import com.dave_cli.proxybox.data.db.AppDatabase
-import com.dave_cli.proxybox.data.repository.ProfileRepository
-import com.dave_cli.proxybox.import_config.ConfigParser
-import com.dave_cli.proxybox.import_config.QrDecoder
+import ir.armaneleven.v2eleven.data.db.AppDatabase
+import ir.armaneleven.v2eleven.data.repository.ProfileRepository
+import ir.armaneleven.v2eleven.import_config.ConfigParser
+import ir.armaneleven.v2eleven.import_config.QrDecoder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import fi.iki.elonen.NanoHTTPD
