@@ -1,14 +1,14 @@
-package com.dave_cli.proxybox.ui.server
+package ir.armaneleven.v2eleven.ui.server
 
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.dave_cli.proxybox.databinding.ActivityLocalServerBinding
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.LocaleHelper
-import com.dave_cli.proxybox.server.LocalConfigServer
-import com.dave_cli.proxybox.server.QrGenerator
+import ir.armaneleven.v2eleven.databinding.ActivityLocalServerBinding
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.LocaleHelper
+import ir.armaneleven.v2eleven.server.LocalConfigServer
+import ir.armaneleven.v2eleven.server.QrGenerator
 
 class LocalServerActivity : AppCompatActivity() {
 
