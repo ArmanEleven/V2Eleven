@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.main.components
+package ir.armaneleven.v2eleven.ui.main.components
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -41,9 +41,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.data.db.ProfileEntity
-import com.dave_cli.proxybox.ui.main.theme.C
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.data.db.ProfileEntity
+import ir.armaneleven.v2eleven.ui.main.theme.C
 
 @Composable
 fun ProfileList(
