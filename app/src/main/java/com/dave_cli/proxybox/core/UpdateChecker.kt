@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
@@ -10,7 +10,7 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.FileProvider
-import com.dave_cli.proxybox.BuildConfig
+import ir.armaneleven.v2eleven.BuildConfig
 import org.json.JSONObject
 import java.io.File
 import java.net.HttpURLConnection
