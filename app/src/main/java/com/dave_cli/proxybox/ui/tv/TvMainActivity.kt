@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.ui.tv
+package ir.armaneleven.v2eleven.ui.tv
 
 import android.app.UiModeManager
 import android.content.Intent
@@ -24,17 +24,17 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import android.content.Context
-import com.dave_cli.proxybox.R
-import com.dave_cli.proxybox.core.CoreService
-import com.dave_cli.proxybox.core.GeoProfile
-import com.dave_cli.proxybox.core.LocaleHelper
-import com.dave_cli.proxybox.core.CoreService.VpnState
-import com.dave_cli.proxybox.core.RoutingPresets
-import com.dave_cli.proxybox.databinding.ActivityTvMainBinding
-import com.dave_cli.proxybox.ui.main.MainActivity
-import com.dave_cli.proxybox.ui.main.MainViewModel
-import com.dave_cli.proxybox.ui.main.SplitTunnelMode
-import com.dave_cli.proxybox.ui.server.LocalServerActivity
+import ir.armaneleven.v2eleven.R
+import ir.armaneleven.v2eleven.core.CoreService
+import ir.armaneleven.v2eleven.core.GeoProfile
+import ir.armaneleven.v2eleven.core.LocaleHelper
+import ir.armaneleven.v2eleven.core.CoreService.VpnState
+import ir.armaneleven.v2eleven.core.RoutingPresets
+import ir.armaneleven.v2eleven.databinding.ActivityTvMainBinding
+import ir.armaneleven.v2eleven.ui.main.MainActivity
+import ir.armaneleven.v2eleven.ui.main.MainViewModel
+import ir.armaneleven.v2eleven.ui.main.SplitTunnelMode
+import ir.armaneleven.v2eleven.ui.server.LocalServerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -164,7 +164,7 @@ class TvMainActivity : FragmentActivity() {
         observeVpnState()
     }
 
-    private fun showDeleteDialog(name: String, profile: com.dave_cli.proxybox.data.db.ProfileEntity) {
+    private fun showDeleteDialog(name: String, profile: ir.armaneleven.v2eleven.data.db.ProfileEntity) {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_profile))
             .setMessage(getString(R.string.delete_confirm, name))
