@@ -1,4 +1,4 @@
-package com.dave_cli.proxybox.core
+package ir.armaneleven.v2eleven.core
 
 import android.content.Context
 import android.content.res.Configuration
