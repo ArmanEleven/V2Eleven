@@ -102,7 +102,7 @@
     <string name="group_about">ABOUT</string>
     <string name="about_subtitle">v%s · Open-source VPN client</string>
     <string name="github">GitHub</string>
-    <string name="github_url">github.com/DaveBugg/ProxyBox</string>
+    <string name="github_url">github.com/ArmanEleven/V2Eleven</string>
     <string name="xray_core">Xray Core</string>
     <string name="xray_subtitle">Powered by XTLS/Xray-core</string>
     <string name="license">License</string>
@@ -129,10 +129,10 @@
     <!-- Notifications -->
     <string name="notif_channel_name">VPN Connection</string>
     <string name="notif_connecting">Connecting…</string>
-    <string name="notif_connected">ProxyBox — Connected</string>
+    <string name="notif_connected">V2 Eleven — Connected</string>
 
     <!-- TV -->
-    <string name="tv_title">ProxyBox TV</string>
+    <string name="tv_title">V2 Eleven TV</string>
     <string name="select_profile">Select Profile</string>
     <string name="no_profiles_tv">No profiles. Click Add Config.</string>
     <string name="add_config_phone">Add Config via Phone</string>
