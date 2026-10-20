@@ -56,10 +56,6 @@ private val primaryDrawerItems = listOf(
 )
 
 private val drawerItems = primaryDrawerItems + listOf(
-    MainDestination.Promotion,
-    MainDestination.Logcat,
-    MainDestination.CheckUpdate,
-    MainDestination.BackupRestore,
     MainDestination.About
 )
 
@@ -91,14 +87,10 @@ fun MainDrawerContent(drawerState: DrawerState, onNavigate: (MainDestination) ->
                 ) {
                     val isDarkTheme = LocalDarkTheme.current
                     Image(
-                        painter = painterResource(R.mipmap.ic_launcher_foreground),
+                        painter = painterResource(R.drawable.ic_v2eleven_drawer_logo),
                         contentDescription = null,
                         modifier = Modifier.size(120.dp),
-                        colorFilter = if (isDarkTheme) {
-                            ColorFilter.tint(Color.White, BlendMode.SrcIn)
-                        } else {
-                            null
-                        }
+                        colorFilter = ColorFilter.tint(Color.White, BlendMode.SrcIn)
                     )
                     Text(
                         text = stringResource(R.string.app_name),
