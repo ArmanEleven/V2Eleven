@@ -1,5 +1,6 @@
 package com.v2ray.ang.ui.main
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,16 +26,19 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -291,14 +295,29 @@ private fun ServerItemColumn(
     doubleColumnDisplay: Boolean,
     actions: ServerRowActions
 ) {
-    Column {
-        ServerListItem(
-            row = row,
-            isSelected = isSelected,
-            doubleColumnDisplay = doubleColumnDisplay,
-            actions = actions
-        )
-        ItemDivider()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 9.dp, vertical = 5.dp)
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(18.dp),
+            color = if (isSelected) Color(0xFF26151B) else Color(0xFF151519).copy(alpha = 0.94f),
+            border = BorderStroke(
+                width = 1.dp,
+                color = if (isSelected) Color(0xFFFF7184).copy(alpha = 0.45f)
+                else Color.White.copy(alpha = 0.075f)
+            ),
+            shadowElevation = if (isSelected) 5.dp else 0.dp
+        ) {
+            ServerListItem(
+                row = row,
+                isSelected = isSelected,
+                doubleColumnDisplay = doubleColumnDisplay,
+                actions = actions
+            )
+        }
     }
 }
 
