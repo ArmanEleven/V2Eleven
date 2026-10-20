@@ -29,14 +29,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
@@ -49,6 +54,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.v2ray.ang.R
 import com.v2ray.ang.dto.LocateTarget
@@ -78,7 +84,7 @@ fun GroupPagerPage(
     onSelectServer: (String) -> Unit,
     onEditServer: (String, ProfileItem) -> Unit,
     onShareServer: (String, ProfileItem) -> Unit,
-    onMoreServer: (String, ProfileItem) -> Unit,
+    onTestServerPing: (String) -> Unit,
     onRemoveServer: (String, String) -> Unit,
     serverCategory: V2ElevenServerCategory = V2ElevenServerCategory.ALL,
     contentPadding: PaddingValues
@@ -96,14 +102,14 @@ fun GroupPagerPage(
         onSelectServer,
         onEditServer,
         onShareServer,
-        onMoreServer,
+        onTestServerPing,
         onRemoveServer,
     ) {
         ServerRowActions(
             select = onSelectServer,
             edit = onEditServer,
             share = onShareServer,
-            more = onMoreServer,
+            testPing = onTestServerPing,
             remove = onRemoveServer,
         )
     }
@@ -129,7 +135,7 @@ private class ServerRowActions(
     val select: (String) -> Unit,
     val edit: (String, ProfileItem) -> Unit,
     val share: (String, ProfileItem) -> Unit,
-    val more: (String, ProfileItem) -> Unit,
+    val testPing: (String) -> Unit,
     val remove: (String, String) -> Unit,
 )
 
@@ -227,7 +233,6 @@ private fun ServerListPage(
                                 actions = actions
                             )
                         }
-                        ItemDivider()
                     }
                 } else {
                     ServerItemRow(
@@ -235,7 +240,6 @@ private fun ServerListPage(
                         isSelected = row.guid == selectedGuid,
                         actions = actions
                     )
-                    ItemDivider()
                 }
             }
         }
@@ -284,7 +288,8 @@ private fun ServerItemRow(
         row = row,
         isSelected = isSelected,
         doubleColumnDisplay = false,
-        actions = actions
+        actions = actions,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 6.dp)
     )
 }
 
@@ -295,30 +300,13 @@ private fun ServerItemColumn(
     doubleColumnDisplay: Boolean,
     actions: ServerRowActions
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 9.dp, vertical = 5.dp)
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(18.dp),
-            color = if (isSelected) Color(0xFF26151B) else Color(0xFF151519).copy(alpha = 0.94f),
-            border = BorderStroke(
-                width = 1.dp,
-                color = if (isSelected) Color(0xFFFF7184).copy(alpha = 0.45f)
-                else Color.White.copy(alpha = 0.075f)
-            ),
-            shadowElevation = if (isSelected) 5.dp else 0.dp
-        ) {
-            ServerListItem(
-                row = row,
-                isSelected = isSelected,
-                doubleColumnDisplay = doubleColumnDisplay,
-                actions = actions
-            )
-        }
-    }
+    ServerListItem(
+        row = row,
+        isSelected = isSelected,
+        doubleColumnDisplay = doubleColumnDisplay,
+        actions = actions,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 7.dp, vertical = 6.dp)
+    )
 }
 
 @Composable
@@ -326,126 +314,160 @@ private fun ServerListItem(
     row: ServerRowUiModel,
     isSelected: Boolean,
     doubleColumnDisplay: Boolean,
-    actions: ServerRowActions
+    actions: ServerRowActions,
+    modifier: Modifier = Modifier
 ) {
-    val testResult = if (row.testDelayMillis == 0L) {
-        ""
-    } else {
-        stringResource(R.string.server_test_delay_value, row.testDelayMillis)
+    val identity = remember(row.guid, row.remarks) { serverVisualIdentity(row.remarks) }
+    val statistics = remember(row.guid, row.statistics) { stripServerFlagEmojis(row.statistics) }
+    val pingText = when {
+        row.testDelayMillis < 0L -> "TIMEOUT"
+        row.testDelayMillis == 0L -> "— ms"
+        else -> "${row.testDelayMillis} ms"
     }
-    val selectedStateDescription = if (isSelected) {
-        stringResource(R.string.acc_selected_server)
-    } else {
-        null
+    val pingColor = when {
+        row.testDelayMillis < 0L -> Color(0xFFFF6D83)
+        row.testDelayMillis in 1L..70L -> Color(0xFFFF98A7)
+        row.testDelayMillis > 70L -> Color(0xFFD3CAD0)
+        else -> Color(0xFFAAA6B0)
     }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .semantics {
-                if (selectedStateDescription != null) {
-                    stateDescription = selectedStateDescription
-                }
-            }
-            .clickable { actions.select(row.guid) }
+    var menuExpanded by remember(row.guid) { mutableStateOf(false) }
+
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(27.dp),
+        color = if (isSelected) Color(0xD72B1820) else Color(0xC91A191F),
+        border = BorderStroke(
+            1.dp,
+            if (isSelected) Color(0xFFFF8295).copy(alpha = 0.42f)
+            else Color.White.copy(alpha = 0.105f)
+        ),
+        tonalElevation = 0.dp,
+        shadowElevation = if (isSelected) 10.dp else 3.dp
     ) {
-        Box(
-            Modifier
-                .width(10.dp)
-                .fillMaxHeight()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    if (isSelected) stateDescription = stringResource(R.string.acc_selected_server)
+                }
+                .clickable { actions.select(row.guid) }
+                .padding(horizontal = 14.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(11.dp)
         ) {
-            if (isSelected) {
-                Row {
-                    Spacer(Modifier.width(6.dp))
-                    Box(
-                        Modifier
-                            .width(4.dp)
-                            .fillMaxHeight()
-                            .padding(vertical = 10.dp)
-                            .background(MaterialTheme.colorScheme.primary)
+            V2ElevenFlagMedallion(flag = identity.flagEmoji, modifier = Modifier.size(49.dp))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = identity.displayName,
+                        modifier = Modifier.weight(1f, fill = false),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color(0xFFF8F3F6),
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (isSelected) {
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = Color(0xFF7C2438).copy(alpha = 0.72f),
+                            border = BorderStroke(1.dp, Color(0xFFFFAAB5).copy(alpha = 0.18f))
+                        ) {
+                            Text(
+                                stringResource(R.string.acc_selected_server),
+                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
+                                fontSize = 9.sp,
+                                color = Color(0xFFFFB5BE),
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = statistics.ifBlank { row.typeDescription },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFFAAA6B0),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Surface(
+                    shape = RoundedCornerShape(10.dp),
+                    color = Color.White.copy(alpha = 0.045f),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.055f))
+                ) {
+                    Text(
+                        text = row.typeDescription,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFFD2BAC2),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
-        }
 
-        Column(
-            Modifier
-                .weight(1f)
-                .padding(start = 8.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
-        ) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(row.remarks, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge.copy(lineBreak = LineBreak.Paragraph), maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (doubleColumnDisplay) {
-                    IconButton(onClick = { actions.more(row.guid, row.profile) }, Modifier.size(36.dp)) {
-                        Icon(
-                            painterResource(R.drawable.ic_more_vert_24dp),
-                            stringResource(R.string.acc_more),
-                            Modifier.size(24.dp)
-                        )
-                    }
-                } else {
-                    IconButton(onClick = { actions.share(row.guid, row.profile) }, Modifier.size(36.dp)) {
-                        Icon(
-                            painterResource(R.drawable.ic_share_24dp),
-                            stringResource(R.string.title_configuration_share),
-                            Modifier.size(24.dp)
-                        )
-                    }
-                    IconButton(onClick = { actions.edit(row.guid, row.profile) }, Modifier.size(36.dp)) {
-                        Icon(
-                            painterResource(R.drawable.ic_edit_24dp),
-                            stringResource(R.string.acc_edit),
-                            Modifier.size(24.dp)
-                        )
-                    }
-                    IconButton(onClick = { actions.remove(row.guid, row.remarks) }, Modifier.size(36.dp)) {
-                        Icon(
-                            painterResource(R.drawable.ic_delete_24dp),
-                            stringResource(R.string.acc_delete),
-                            Modifier.size(24.dp)
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                if (row.subscriptionBadge.isNotBlank()) {
-                    Box(
-                        Modifier
-                            .size(24.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)), Alignment.Center
-                    ) {
-                        Text(row.subscriptionBadge.uppercase(), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                    }
-                }
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 Text(
-                    row.statistics,
-                    Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = pingText,
+                    color = pingColor,
+                    fontSize = if (doubleColumnDisplay) 15.sp else 17.sp,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    softWrap = false
+                )
+                Text(
+                    text = stringResource(R.string.v2eleven_home_latency),
+                    color = Color(0xFF928D98),
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(
-                    row.typeDescription,
-                    modifier = Modifier.weight(1f, fill = false),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = colorConfigType,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    testResult,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if (row.testDelayMillis < 0L) colorPingRed else colorPing,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+
+            Box(Modifier.wrapContentSize(Alignment.TopEnd)) {
+                IconButton(
+                    onClick = { menuExpanded = true },
+                    modifier = Modifier.size(38.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_more_vert_24dp),
+                        contentDescription = stringResource(R.string.acc_more),
+                        tint = Color(0xFFDCD4DB),
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { menuExpanded = false },
+                    modifier = Modifier
+                        .border(1.dp, Color.White.copy(alpha = 0.14f), RoundedCornerShape(24.dp))
+                        .width(232.dp),
+                    containerColor = Color(0xF21A191F),
+                    tonalElevation = 0.dp,
+                    shadowElevation = 24.dp,
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.v2eleven_menu_test_ping), color = Color(0xFFF8F3F6)) },
+                        onClick = { menuExpanded = false; actions.testPing(row.guid) }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.title_configuration_share), color = Color(0xFFF8F3F6)) },
+                        onClick = { menuExpanded = false; actions.share(row.guid, row.profile) }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.action_edit), color = Color(0xFFF8F3F6)) },
+                        onClick = { menuExpanded = false; actions.edit(row.guid, row.profile) }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.action_delete), color = Color(0xFFFF8798)) },
+                        onClick = { menuExpanded = false; actions.remove(row.guid, row.remarks) }
+                    )
+                }
             }
         }
     }

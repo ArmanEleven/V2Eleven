@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -18,6 +19,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -65,47 +67,47 @@ private val LightColor = lightColorScheme(
 )
 
 private val DarkColor = darkColorScheme(
-    primary = Color(0xFFC0C0C0), // Silver Gray
-    onPrimary = Color(0xFF303030), // Dark Gray
-    primaryContainer = Color(0xFF474747), // Gray
-    onPrimaryContainer = Color(0xFFE0E0E0), // Light Gray
-    secondary = Color(0xFFf97910), // Orange
-    onSecondary = Color(0xFF4E2600), // Dark Brown
-    secondaryContainer = Color(0xFF511D29), // Brown
-    onSecondaryContainer = Color(0xFFFFE4E8), // Pale Orange
-    tertiary = Color(0xFFCAA4AD), // Mint Green
-    onTertiary = Color(0xFF2A1219), // Dark Teal
-    tertiaryContainer = Color(0xFF47202B), // Teal
-    onTertiaryContainer = Color(0xFFF2DCE1), // Light Green
-    error = Color(0xFFFFB4AB), // Light Red
-    errorContainer = Color(0xFF93000A), // Dark Red
-    onError = Color(0xFF690005), // Deep Red
-    onErrorContainer = Color(0xFFFFDAD6), // Light Red
-    background = Color(0xFF1C1B1F), // Near Black
-    onBackground = Color(0xFFE6E1E5), // Light Gray
-    surface = Color(0xFF1C1B1F), // Near Black
-    onSurface = Color(0xFFE6E1E5), // Light Gray
-    surfaceVariant = Color(0xFF49454F), // Dark Gray
-    onSurfaceVariant = Color(0xFFCAC4D0), // Light Gray
-    outline = Color(0xFF938F99), // Grayish Purple
-    outlineVariant = Color(0xFF49454F), // Dark Gray
-    inverseSurface = Color(0xFFE6E1E5), // Light Gray
-    inverseOnSurface = Color(0xFF1C1B1F), // Near Black
-    inversePrimary = Color(0xFF000000), // Black
-    scrim = Color(0xFF000000), // Black
-    surfaceTint = Color(0xFFC0C0C0), // Silver Gray
-    surfaceContainerLowest = Color(0xFF0F0F12), // Near Black
-    surfaceContainerLow = Color(0xFF1A191D), // Dark Gray
-    surfaceContainer = Color(0xFF1E1D21), // Dark Gray
-    surfaceContainerHigh = Color(0xFF282729), // Dark Gray
-    surfaceContainerHighest = Color(0xFF333234), // Dark Gray
+    primary = Color(0xFFFF6B80),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF652235),
+    onPrimaryContainer = Color(0xFFFFDCE2),
+    secondary = Color(0xFFFF8294),
+    onSecondary = Color(0xFF2A0710),
+    secondaryContainer = Color(0xFF4A1925),
+    onSecondaryContainer = Color(0xFFFFDCE2),
+    tertiary = Color(0xFFBEB6C0),
+    onTertiary = Color(0xFF18151A),
+    tertiaryContainer = Color(0xFF342831),
+    onTertiaryContainer = Color(0xFFF0DDE4),
+    error = Color(0xFFFFB4AB),
+    errorContainer = Color(0xFF93000A),
+    onError = Color(0xFF690005),
+    onErrorContainer = Color(0xFFFFDAD6),
+    background = Color(0xFF08090D),
+    onBackground = Color(0xFFF6F2F5),
+    surface = Color(0xFF0D0D12),
+    onSurface = Color(0xFFF6F2F5),
+    surfaceVariant = Color(0xFF29272E),
+    onSurfaceVariant = Color(0xFFC2BBC5),
+    outline = Color(0xFF756B77),
+    outlineVariant = Color(0xFF403941),
+    inverseSurface = Color(0xFFF6F2F5),
+    inverseOnSurface = Color(0xFF171419),
+    inversePrimary = Color(0xFF7C2032),
+    scrim = Color(0xFF000000),
+    surfaceTint = Color(0xFFFF6B80),
+    surfaceContainerLowest = Color(0xFF060609),
+    surfaceContainerLow = Color(0xFF101015),
+    surfaceContainer = Color(0xFF17161C),
+    surfaceContainerHigh = Color(0xFF211F26),
+    surfaceContainerHighest = Color(0xFF2B2830),
 )
 
 // Semantic Colors
-val colorPing = Color(0xFF009966) // Green
+val colorPing = Color(0xFFFF8294) // V2Eleven crimson
 val colorPingRed = Color(0xFFFF6478) // Pink Red
-val colorConfigType = Color(0xFFf97910) // Orange
-val colorFabActive = Color(0xFFf97910) // Orange
+val colorConfigType = Color(0xFFE3A7B3) // Soft crimson
+val colorFabActive = Color(0xFFB72F49) // V2Eleven crimson
 val colorFabInactiveLight = Color(0xFF9C9C9C) // Gray
 val colorFabInactiveDark = Color(0xFF646464) // Dark Gray
 val dividerColorLight = Color(0xFFE0E0E0) // Light Gray
@@ -145,7 +147,7 @@ object ThemeManager {
         _themeMode.value =
             MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "2") ?: "2"
         _dynamicColorEnabled.value =
-            MmkvManager.decodeSettingsBool(AppConfig.PREF_DYNAMIC_COLOR, true)
+            MmkvManager.decodeSettingsBool(AppConfig.PREF_DYNAMIC_COLOR, false)
     }
 }
 
@@ -195,7 +197,8 @@ fun AppTheme(
         LocalAppSnackbar provides snackbarController
     ) {
         MaterialTheme(
-            colorScheme = colorScheme
+            colorScheme = colorScheme,
+            typography = Typography(defaultFontFamily = FontFamily.SansSerif)
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 AppSnackbarBridge(controller = snackbarController)

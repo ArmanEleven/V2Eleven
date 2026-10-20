@@ -51,8 +51,13 @@ fun MainScreen(
     val confirmRemove = uiState.confirmRemove
     val shareQRCodeBitmap = uiState.shareQRCodeBitmap
 
-    val isDarkTheme = LocalDarkTheme.current
-    var selectedSectionName by rememberSaveable { mutableStateOf(V2ElevenSection.SUBSCRIPTION.name) }
+    val activeGroupFlow = remember(mainViewModel, uiState.selectedGroupId) {
+        mainViewModel.serverGroupState(uiState.selectedGroupId)
+    }
+    val activeGroupState by activeGroupFlow.collectAsStateWithLifecycle()
+    val activeServer = activeGroupState.rows.firstOrNull { it.guid == selectedGuid }
+    val activeServerIdentity = serverVisualIdentity(activeServer?.remarks.orEmpty())
+    var selectedSectionName by rememberSaveable { mutableStateOf(V2ElevenSection.HOME.name) }
     val selectedSection = V2ElevenSection.valueOf(selectedSectionName)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -155,11 +160,12 @@ fun MainScreen(
         Scaffold(
             contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
             topBar = {
-                MainTopBar(
+                V2ElevenTopBar(
+                    titleRes = selectedSection.titleRes,
                     isLoading = isLoading,
                     showSearch = showSearch,
                     searchQuery = searchQuery,
-                    onSearchQueryChange = { query: String ->
+                    onSearchQueryChange = { query ->
                         searchQuery = query
                         onAction(MainAction.Search(query))
                     },
@@ -168,7 +174,7 @@ fun MainScreen(
                         onAction(MainAction.Search(""))
                         showSearch = false
                     },
-                    onSearchToggle = { show: Boolean -> showSearch = show },
+                    onSearchToggle = { show -> showSearch = show },
                     onMenuClick = { scope.launch { drawerState.open() } },
                     onAction = onAction,
                     onMoreMenuAction = { action ->
@@ -189,12 +195,6 @@ fun MainScreen(
             },
             bottomBar = {
                 Column(modifier = Modifier.navigationBarsPadding()) {
-                    MainBottomBar(
-                        displayText = displayText,
-                        isRunning = isRunning,
-                        isDarkTheme = isDarkTheme,
-                        onAction = onAction
-                    )
                     V2ElevenNavigationBar(
                         selected = selectedSection,
                         onSelect = { selectedSectionName = it.name }
@@ -203,7 +203,20 @@ fun MainScreen(
             },
             floatingActionButton = {},
         ) { innerPadding ->
-            if (selectedSection == V2ElevenSection.SUBSCRIPTION) {
+            if (selectedSection == V2ElevenSection.HOME) {
+                V2ElevenHomePage(
+                    isRunning = isRunning,
+                    statusText = displayText,
+                    selectedServerName = activeServer?.remarks?.let { serverVisualIdentity(it).displayName }.orEmpty(),
+                    selectedServerFlag = activeServer?.remarks?.let { serverVisualIdentity(it).flagEmoji } ?: "◉",
+                    selectedServerPingMillis = activeServer?.testDelayMillis ?: 0L,
+                    onToggleConnection = { onAction(MainAction.ToggleService) },
+                    onTestPing = { onAction(MainAction.TestRealAllServers) },
+                    onOpenGaming = { selectedSectionName = V2ElevenSection.GAMING.name },
+                    onOpenSubscription = { selectedSectionName = V2ElevenSection.SUBSCRIPTION.name },
+                    modifier = Modifier.fillMaxSize().padding(innerPadding)
+                )
+            } else if (selectedSection == V2ElevenSection.SUBSCRIPTION) {
                 V2ElevenSubscriptionPage(
                     onAddSubscription = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
                     modifier = Modifier
@@ -216,26 +229,11 @@ fun MainScreen(
                         .fillMaxSize()
                         .padding(innerPadding)
                 ) {
-                    if (groups.size > 1) {
-                        GroupTabBar(
-                            groups = groups,
-                            selectedTabIndex = pagerState.currentPage.coerceIn(0, groups.lastIndex),
-                            mainViewModel = mainViewModel,
-                            onTabClick = { targetIndex ->
-                                scope.launch {
-                                    pagerState.navigateToPageOptimized(
-                                        targetPage = targetIndex,
-                                        animateAdjacentPage = true
-                                    )
-                                }
-                            }
-                        )
-                    }
 
                     HorizontalPager(
                         state = pagerState,
                         modifier = Modifier.fillMaxSize(),
-                        userScrollEnabled = true,
+                        userScrollEnabled = false,
                         beyondViewportPageCount = 1,
                         key = { page -> groups.getOrNull(page)?.id ?: "group-page-$page" }
                     ) { page ->
@@ -255,9 +253,7 @@ fun MainScreen(
                             onShareServer = { guid, profile ->
                                 shareTarget = Triple(guid, profile, false)
                             },
-                            onMoreServer = { guid, profile ->
-                                shareTarget = Triple(guid, profile, true)
-                            },
+                            onTestServerPing = { guid -> mainViewModel.testServerRealPing(guid) },
                             onRemoveServer = removeServer,
                             serverCategory = if (selectedSection == V2ElevenSection.GAMING) {
                                 V2ElevenServerCategory.TURKEY_GAMING
@@ -268,7 +264,7 @@ fun MainScreen(
                                 start = 0.dp,
                                 top = 0.dp,
                                 end = 0.dp,
-                                bottom = 150.dp
+                                bottom = 116.dp
                             )
                         )
                     }

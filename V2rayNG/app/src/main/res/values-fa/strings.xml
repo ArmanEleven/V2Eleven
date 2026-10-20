@@ -595,4 +595,16 @@
     <string name="v2eleven_go_subscription">رفتن به صفحه اشتراک</string>
     <string name="v2eleven_invalid_url">این آدرس، لینک اشتراک معتبر به نظر نمی‌رسد.</string>
 
+
+    <string name="v2eleven_nav_home">خانه</string>
+    <string name="v2eleven_home_eyebrow">شبکه خصوصی</string>
+    <string name="v2eleven_home_title">اتصال امن</string>
+    <string name="v2eleven_home_subtitle">مسیر مناسب خودت؛ اتصال با یک لمس.</string>
+    <string name="v2eleven_home_select_server">سرور انتخاب‌شده</string>
+    <string name="v2eleven_home_no_server">هنوز سروری انتخاب نشده</string>
+    <string name="v2eleven_home_latency">پینگ</string>
+    <string name="v2eleven_connect">اتصال</string>
+    <string name="v2eleven_disconnect">قطع اتصال</string>
+    <string name="v2eleven_menu_test_ping">تست پینگ</string>
+
 </resources>

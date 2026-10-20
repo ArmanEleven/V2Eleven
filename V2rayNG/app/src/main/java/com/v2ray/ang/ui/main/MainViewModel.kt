@@ -880,6 +880,41 @@ class MainViewModel(
         }
     }
 
+    fun testServerRealPing(guid: String) {
+        cancelAllPing()
+        val profile = dataSource.decodeServerConfig(guid) ?: return
+        val groupId = profile.subscriptionId.ifEmpty { uiState.value.selectedGroupId }
+        val request = testRequests.beginBulk(groupId)
+        _uiState.update { it.copy(isTesting = true, status = MainStatus.Testing) }
+        bulkTestJob = viewModelScope.launch {
+            withContext(ioDispatcher) {
+                dataSource.clearAllTestDelayResults(listOf(guid))
+                cacheMutex.withLock {
+                    groupDataCache[groupId]?.let { cached ->
+                        groupDataCache[groupId] = cached.map { server ->
+                            if (server.guid == guid) server.copy(testDelayMillis = 0L) else server
+                        }
+                    }
+                }
+                mutableServerGroupState(groupId).update { current ->
+                    current.copy(
+                        servers = current.servers.map { if (it.guid == guid) it.copy(testDelayMillis = 0L) else it },
+                        rows = current.rows.map { if (it.guid == guid) it.copy(testDelayMillis = 0L) else it }
+                    )
+                }
+            }
+            dataSource.sendMsg2TestService(
+                TestServiceMessage(
+                    key = AppConfig.MSG_MEASURE_CONFIG_START,
+                    subscriptionId = groupId,
+                    serverGuids = listOf(guid),
+                    onlyTcp = false
+                ),
+                request.id
+            )
+        }
+    }
+
     private fun cancelPendingTestResults() {
         testResultFlushJob?.cancel()
         testResultFlushJob = null

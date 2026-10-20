@@ -595,4 +595,16 @@
     <string name="v2eleven_go_subscription">Open subscription page</string>
     <string name="v2eleven_invalid_url">That doesn\'t look like a valid subscription URL.</string>
 
+
+    <string name="v2eleven_nav_home">Home</string>
+    <string name="v2eleven_home_eyebrow">PRIVATE NETWORK</string>
+    <string name="v2eleven_home_title">Secure connection</string>
+    <string name="v2eleven_home_subtitle">Your route, your rules. One tap to connect.</string>
+    <string name="v2eleven_home_select_server">SELECTED ROUTE</string>
+    <string name="v2eleven_home_no_server">No server selected</string>
+    <string name="v2eleven_home_latency">LATENCY</string>
+    <string name="v2eleven_connect">Connect</string>
+    <string name="v2eleven_disconnect">Disconnect</string>
+    <string name="v2eleven_menu_test_ping">Test ping</string>
+
 </resources>

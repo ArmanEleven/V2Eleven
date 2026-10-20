@@ -51,9 +51,10 @@ import com.v2ray.ang.R
 import com.v2ray.ang.dto.entities.ProfileItem
 
 enum class V2ElevenSection(val titleRes: Int, @DrawableRes val iconRes: Int) {
-    SUBSCRIPTION(R.string.v2eleven_nav_subscription, R.drawable.ic_subscriptions_24dp),
+    HOME(R.string.v2eleven_nav_home, R.drawable.ic_home_24dp),
     GAMING(R.string.v2eleven_nav_gaming, R.drawable.ic_play_24dp),
-    BROWSING(R.string.v2eleven_nav_browsing, R.drawable.ic_source_code_24dp)
+    BROWSING(R.string.v2eleven_nav_browsing, R.drawable.ic_source_code_24dp),
+    SUBSCRIPTION(R.string.v2eleven_nav_subscription, R.drawable.ic_subscriptions_24dp)
 }
 
 enum class V2ElevenServerCategory {
@@ -89,56 +90,58 @@ fun V2ElevenNavigationBar(
     onSelect: (V2ElevenSection) -> Unit
 ) {
     Surface(
-        color = Color(0xF20A0B0E),
-        contentColor = Color(0xFFF2F2F4),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 7.dp),
+        shape = RoundedCornerShape(34.dp),
+        color = Color(0xD917161C),
+        contentColor = Color(0xFFF6F3F5),
         tonalElevation = 0.dp,
-        shadowElevation = 14.dp,
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f))
+        shadowElevation = 23.dp,
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.14f))
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp, top = 9.dp, bottom = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color.White.copy(alpha = 0.055f), Color.White.copy(alpha = 0.012f), Color.Transparent)
+                    )
+                )
+                .padding(horizontal = 7.dp, vertical = 7.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             V2ElevenSection.entries.forEach { item ->
-                val isSelected = item == selected
-                Column(
+                val active = item == selected
+                Surface(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(
-                            if (isSelected) Color(0xFF7F1D2D).copy(alpha = 0.58f)
-                            else Color.Transparent
-                        )
-                        .clickable { onSelect(item) }
-                        .padding(horizontal = 5.dp, vertical = 9.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                        .clip(RoundedCornerShape(27.dp))
+                        .clickable { onSelect(item) },
+                    shape = RoundedCornerShape(27.dp),
+                    color = if (active) Color(0xFF46202A).copy(alpha = 0.88f) else Color.Transparent,
+                    border = if (active) BorderStroke(1.dp, Color(0xFFFFA0AD).copy(alpha = 0.24f)) else null,
+                    tonalElevation = 0.dp
                 ) {
-                    Icon(
-                        painter = painterResource(item.iconRes),
-                        contentDescription = null,
-                        tint = if (isSelected) Color(0xFFFF7D88) else Color(0xFF989BA3),
-                        modifier = Modifier.size(21.dp)
-                    )
-                    Text(
-                        text = stringResource(item.titleRes),
-                        color = if (isSelected) Color.White else Color(0xFFA7AAB2),
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    if (isSelected) {
-                        Box(
-                            modifier = Modifier
-                                .width(20.dp)
-                                .height(2.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFFFF6478))
+                    Column(
+                        modifier = Modifier.padding(horizontal = 3.dp, vertical = 9.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(item.iconRes),
+                            contentDescription = stringResource(item.titleRes),
+                            tint = if (active) Color(0xFFFF9AA8) else Color(0xFF9C98A2),
+                            modifier = Modifier.size(21.dp)
                         )
-                    } else {
-                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = stringResource(item.titleRes),
+                            color = if (active) Color(0xFFFFF7F9) else Color(0xFFAAA6B0),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = if (active) FontWeight.SemiBold else FontWeight.Normal,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
             }
@@ -346,8 +349,8 @@ fun V2ElevenEmptyServersPage(
 private fun V2ElevenGlassCard(content: @Composable () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.045f)),
+        shape = RoundedCornerShape(30.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.052f)),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.095f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
