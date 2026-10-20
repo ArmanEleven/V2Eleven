@@ -11,6 +11,9 @@ on:
       - "hev-socks5-tunnel"
       - ".gitmodules"
       - "compile-hevtun.sh"
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
