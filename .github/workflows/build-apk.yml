@@ -43,7 +43,7 @@ jobs:
       - name: Install Android NDK
         shell: bash
         run: |
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --channel=0 --install "ndk;30.0.16248370"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" --channel=0 --install "ndk;30.0.16248370"
           echo "NDK_HOME=$ANDROID_HOME/ndk/30.0.16248370" >> "$GITHUB_ENV"
 
       - name: Build native tunnel libraries
