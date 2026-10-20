@@ -205,12 +205,7 @@ fun MainScreen(
         ) { innerPadding ->
             if (selectedSection == V2ElevenSection.SUBSCRIPTION) {
                 V2ElevenSubscriptionPage(
-                    subscriptions = mainViewModel.getSubscriptions(),
                     onAddSubscription = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
-                    onRenewalClick = { onAction(MainAction.OpenRenewalBot) },
-                    onSupportClick = { onAction(MainAction.OpenSupportContact) },
-                    onPasteLink = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
-                    onUpdateClick = { onAction(MainAction.UpdateSubscriptions) },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
