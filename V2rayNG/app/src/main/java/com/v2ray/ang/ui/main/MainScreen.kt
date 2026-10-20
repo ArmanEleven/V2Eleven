@@ -229,6 +229,13 @@ fun MainScreen(
             } else if (selectedSection == V2ElevenSection.SUBSCRIPTION) {
                 V2ElevenSubscriptionPage(
                     onAddSubscription = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
+                    onRetrySubscriptionUpdate = {
+                        mainViewModel.getSubscriptions()
+                            .firstOrNull { it.subscription.url.isNotBlank() }
+                            ?.guid
+                            ?.let { mainViewModel.updateSubscriptionNow(it) }
+                    },
+                    onOpenSupport = { onAction(MainAction.OpenSupportContact) },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
