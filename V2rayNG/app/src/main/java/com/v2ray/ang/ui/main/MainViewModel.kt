@@ -411,12 +411,43 @@ class MainViewModel(
         } else {
             emptyMap()
         }
-        return servers.map { server ->
+        val countryCounts = mutableMapOf<String, Int>()
+        return servers.map { original ->
+            val identity = serverVisualIdentity(original.profile.remarks)
+            val countryName = persianCountryName(identity.flagEmoji)
+            val displayName = if (countryName == null) {
+                identity.displayName
+            } else {
+                val number = (countryCounts[identity.flagEmoji] ?: 0) + 1
+                countryCounts[identity.flagEmoji] = number
+                "$countryName $number"
+            }
+            // Rename only the UI copy; persisted subscription/config remarks stay untouched.
+            val server = original.copy(profile = original.profile.copy(remarks = displayName))
             buildServerRowUiModel(
                 server = server,
                 subscriptionRemarks = subscriptionRemarks[server.profile.subscriptionId].orEmpty()
             )
         }
+    }
+
+    private fun persianCountryName(flag: String): String? = when (flag) {
+        "🇩🇪" -> "آلمان"
+        "🇹🇷" -> "ترکیه"
+        "🇫🇷" -> "فرانسه"
+        "🇫🇮" -> "فنلاند"
+        "🇸🇬" -> "سنگاپور"
+        "🇺🇸" -> "آمریکا"
+        "🇬🇧" -> "بریتانیا"
+        "🇳🇱" -> "هلند"
+        "🇷🇴" -> "رومانی"
+        "🇭🇺" -> "مجارستان"
+        "🇵🇱" -> "لهستان"
+        "🇮🇹" -> "ایتالیا"
+        "🇯🇵" -> "ژاپن"
+        "🇨🇦" -> "کانادا"
+        "🇸🇪" -> "سوئد"
+        else -> null
     }
 
     fun getSubscriptions(): List<SubscriptionCache> = dataSource.getSubscriptions()
