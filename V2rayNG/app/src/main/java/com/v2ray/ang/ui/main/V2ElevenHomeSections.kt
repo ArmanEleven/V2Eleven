@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -152,6 +153,8 @@ fun V2ElevenNavigationBar(
 @Composable
 fun V2ElevenSubscriptionPage(
     onAddSubscription: (String) -> Unit,
+    onRetrySubscriptionUpdate: () -> Unit,
+    onOpenSupport: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val clipboard = LocalClipboardManager.current
@@ -277,6 +280,52 @@ fun V2ElevenSubscriptionPage(
                         text = stringResource(R.string.v2eleven_add_subscription),
                         fontWeight = FontWeight.SemiBold
                     )
+                }
+            }
+        }
+
+        V2ElevenGlassCard {
+            Text(
+                text = "اگر بروزرسانی بار اول ناموفق بود، VPN را وصل کن و دوباره تلاش کن.",
+                color = Color(0xFFF7F3F5),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                text = "اگر تلاش دوم هم شکست خورد، پیام آماده را کپی کن یا مستقیم با پشتیبانی تماس بگیر.",
+                color = Color(0xFFB5B0B6),
+                style = MaterialTheme.typography.bodySmall
+            )
+            Button(
+                onClick = onRetrySubscriptionUpdate,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF183321), contentColor = Color(0xFFB8F6CD)),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("تلاش مجدد برای بروزرسانی")
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextButton(
+                    onClick = {
+                        clipboard.setText(
+                            AnnotatedString("سلام، در بروزرسانی اشتراک V2Eleven مشکل دارم. VPN را هم تست کرده‌ام؛ لطفاً راهنمایی کنید.")
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("کپی پیام پشتیبانی", color = Color(0xFFFFA0A8))
+                }
+                Button(
+                    onClick = onOpenSupport,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9D263C)),
+                    shape = RoundedCornerShape(14.dp)
+                ) {
+                    Text("تماس با پشتیبانی")
                 }
             }
         }
