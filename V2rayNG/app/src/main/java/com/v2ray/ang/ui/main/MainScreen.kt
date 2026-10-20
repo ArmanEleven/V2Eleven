@@ -210,6 +210,17 @@ fun MainScreen(
                     selectedServerFlag = activeServer?.remarks?.let { serverVisualIdentity(it).flagEmoji } ?: "◉",
                     selectedServerPingMillis = activeServer?.testDelayMillis ?: 0L,
                     onToggleConnection = { onAction(MainAction.ToggleService) },
+                    onAutoSelectBestServer = {
+                        scope.launch {
+                            val bestGuid = mainViewModel.autoSelectBestServer()
+                            if (bestGuid != null) {
+                                onAction(MainAction.SelectServer(bestGuid))
+                                if (!mainViewModel.uiState.value.isRunning) {
+                                    onAction(MainAction.ToggleService)
+                                }
+                            }
+                        }
+                    },
                     onTestPing = { onAction(MainAction.TestRealAllServers) },
                     onOpenGaming = { selectedSectionName = V2ElevenSection.GAMING.name },
                     onOpenSubscription = { selectedSectionName = V2ElevenSection.SUBSCRIPTION.name },
