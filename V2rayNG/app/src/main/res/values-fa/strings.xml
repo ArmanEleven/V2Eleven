@@ -583,6 +583,8 @@
     <string name="v2eleven_clipboard_empty">کلیپ‌بورد خالی است. ابتدا لینک اشتراک را کپی کنید.</string>
     <string name="v2eleven_paste_link">چسباندن لینک</string>
     <string name="v2eleven_save_link">ثبت لینک</string>
+    <string name="v2eleven_add_subscription">افزودن اشتراک</string>
+    <string name="v2eleven_enter_subscription_url">اول لینک اشتراک را وارد کن.</string>
     <string name="v2eleven_no_link_title">لینک سابسکریپشن ندارید؟</string>
     <string name="v2eleven_no_link_description">برای خرید یا تمدید سرویس، ربات الون را باز کنید.</string>
     <string name="v2eleven_get_link">خرید یا تمدید از ربات</string>
