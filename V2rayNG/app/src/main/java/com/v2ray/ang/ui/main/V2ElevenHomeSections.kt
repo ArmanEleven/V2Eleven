@@ -358,30 +358,3 @@ private fun V2ElevenGlassCard(content: @Composable () -> Unit) {
         )
     }
 }
-
-@Composable
-private fun V2ElevenInfoTile(
-    title: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(15.dp),
-        color = Color(0xFF08090C).copy(alpha = 0.72f),
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.07f))
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            Text(title, color = Color(0xFFA6A1A8), style = MaterialTheme.typography.labelMedium)
-            Text(
-                value,
-                color = Color(0xFFE5DFE4),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
