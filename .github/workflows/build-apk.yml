@@ -78,12 +78,18 @@ jobs:
           cache: gradle
           cache-dependency-path: V2rayNG/gradle/libs.versions.toml
 
-      - name: Build debug APK
+      - name: Run Play Store debug unit tests
         working-directory: V2rayNG
         shell: bash
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           chmod +x gradlew
+          ./gradlew --no-daemon testPlaystoreDebugUnitTest
+
+      - name: Build debug APK
+        working-directory: V2rayNG
+        shell: bash
+        run: |
           ./gradlew --no-daemon assemblePlaystoreDebug
 
       - name: Upload APK files
