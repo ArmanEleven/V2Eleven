@@ -536,8 +536,12 @@ class MainViewModel(
         }
     }
 
-    private fun importConfigViaSub() {
-        val subId = uiState.value.selectedGroupId
+    fun updateSubscriptionNow(subscriptionId: String) {
+        importConfigViaSub(subscriptionId)
+    }
+
+    private fun importConfigViaSub(subscriptionId: String? = null) {
+        val subId = subscriptionId ?: uiState.value.selectedGroupId
         launchLoading {
             withContext(ioDispatcher) {
                 try {
