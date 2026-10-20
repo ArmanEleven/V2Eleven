@@ -299,6 +299,7 @@ fun V2ElevenHomePage(
     selectedServerPingMillis: Long,
     onToggleConnection: () -> Unit,
     onAutoSelectBestServer: () -> Unit,
+    isAutoSelectingBest: Boolean,
     onTestPing: () -> Unit,
     onOpenGaming: () -> Unit,
     onOpenSubscription: () -> Unit,
@@ -467,6 +468,7 @@ fun V2ElevenHomePage(
 
         Button(
             onClick = onAutoSelectBestServer,
+            enabled = !isAutoSelectingBest,
             modifier = Modifier.fillMaxWidth().height(48.dp),
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
@@ -475,7 +477,10 @@ fun V2ElevenHomePage(
             ),
             border = BorderStroke(1.dp, Color(0xFF55D887).copy(alpha = 0.38f))
         ) {
-            Text("انتخاب خودکار بهترین سرور", fontWeight = FontWeight.SemiBold)
+            Text(
+                if (isAutoSelectingBest) "در حال بررسی دو مرحله‌ای سرورها…" else "انتخاب خودکار بهترین سرور",
+                fontWeight = FontWeight.SemiBold
+            )
         }
 
         Surface(
