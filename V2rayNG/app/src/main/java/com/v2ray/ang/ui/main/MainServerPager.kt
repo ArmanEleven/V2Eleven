@@ -326,9 +326,8 @@ private fun ServerListItem(
         else -> "${row.testDelayMillis} ms"
     }
     val pingColor = when {
-        row.testDelayMillis < 0L -> Color(0xFFFF6D83)
-        row.testDelayMillis in 1L..70L -> Color(0xFFFF98A7)
-        row.testDelayMillis > 70L -> Color(0xFFD3CAD0)
+        row.testDelayMillis < 0L -> Color(0xFFFF5964)
+        row.testDelayMillis > 0L -> Color(0xFF55D887)
         else -> Color(0xFFAAA6B0)
     }
     val selectedDescription = if (isSelected) stringResource(R.string.acc_selected_server) else null
