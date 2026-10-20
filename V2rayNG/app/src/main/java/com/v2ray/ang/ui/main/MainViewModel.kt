@@ -943,7 +943,9 @@ class MainViewModel(
             kotlinx.coroutines.delay(250)
             val latest = mutableServerGroupState(groupId).value.servers.associate { it.guid to it.testDelayMillis }
             serverGuids.forEach { guid ->
-                val measured = latest[guid] ?: dataSource.decodeAffiliationInfo(guid)?.testDelayMillis ?: 0L
+                val measured = latest[guid]?.takeIf { it > 0L }
+                    ?: dataSource.decodeAffiliationInfo(guid)?.testDelayMillis
+                    ?: 0L
                 if (measured > 0L) samples[guid]?.add(measured)
             }
         }
