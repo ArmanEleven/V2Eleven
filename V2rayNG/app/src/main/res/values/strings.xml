@@ -561,4 +561,36 @@
     <string name="connection_test_empty_message">no details available</string>
     <string name="value_unknown">unknown</string>
 
+    <string name="v2eleven_nav_subscription">Subscription</string>
+    <string name="v2eleven_nav_gaming">Gaming</string>
+    <string name="v2eleven_nav_browsing">Web</string>
+    <string name="v2eleven_subscription_eyebrow" translatable="false">ELEVEN NETWORK</string>
+    <string name="v2eleven_subscription_title">Your subscription</string>
+    <string name="v2eleven_subscription_not_added">No subscription added yet</string>
+    <string name="v2eleven_subscription_added">Subscription saved</string>
+    <string name="v2eleven_subscription_add_hint">Add your subscription link to load your servers</string>
+    <string name="v2eleven_subscription_saved_hint">Your subscription link is stored on this device</string>
+    <string name="v2eleven_status_added">Added</string>
+    <string name="v2eleven_usage_title">Traffic left</string>
+    <string name="v2eleven_expiry_title">Expires in</string>
+    <string name="v2eleven_data_unavailable">Unavailable</string>
+    <string name="v2eleven_metadata_note">Traffic and expiry appear here only when your subscription provider supplies reliable usage data.</string>
+    <string name="v2eleven_update_subscription">Update subscription</string>
+    <string name="v2eleven_link_title">Connect your subscription</string>
+    <string name="v2eleven_link_description">Paste the single subscription link you received from Eleven.</string>
+    <string name="v2eleven_subscription_url">Subscription URL</string>
+    <string name="v2eleven_subscription_placeholder">https://…</string>
+    <string name="v2eleven_clipboard_empty">The clipboard is empty. Copy your subscription link first.</string>
+    <string name="v2eleven_paste_link">Paste link</string>
+    <string name="v2eleven_save_link">Save link</string>
+    <string name="v2eleven_no_link_title">Don't have a subscription link?</string>
+    <string name="v2eleven_no_link_description">Open the Eleven bot to get started or renew your service.</string>
+    <string name="v2eleven_get_link">Get or renew via bot</string>
+    <string name="v2eleven_support">Contact support</string>
+    <string name="v2eleven_no_gaming">No Turkey gaming servers</string>
+    <string name="v2eleven_no_browsing">No web-browsing servers</string>
+    <string name="v2eleven_no_servers_hint">Add or refresh your subscription to load the servers for this section.</string>
+    <string name="v2eleven_go_subscription">Open subscription page</string>
+    <string name="v2eleven_invalid_url">That doesn't look like a valid subscription URL.</string>
+
 </resources>
