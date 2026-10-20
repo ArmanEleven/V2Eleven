@@ -32,14 +32,14 @@ private val LightColor = lightColorScheme(
     onPrimary = Color(0xFFFFFFFF), // White
     primaryContainer = Color(0xFFE0E0E0), // Light Gray
     onPrimaryContainer = Color(0xFF000000), // Black
-    secondary = Color(0xFFf97910), // Orange
+    secondary = Color(0xFFE3485F), // Orange
     onSecondary = Color(0xFFFFFFFF), // White
-    secondaryContainer = Color(0xFFFFE8D6), // Pale Orange
-    onSecondaryContainer = Color(0xFF2B1700), // Dark Brown
-    tertiary = Color(0xFF009966), // Green
+    secondaryContainer = Color(0xFFFFE4E8), // Pale Orange
+    onSecondaryContainer = Color(0xFF3C1019), // Dark Brown
+    tertiary = Color(0xFF8B4251), // Green
     onTertiary = Color(0xFFFFFFFF), // White
-    tertiaryContainer = Color(0xFFA0F2D0), // Light Green
-    onTertiaryContainer = Color(0xFF00201A), // Dark Teal
+    tertiaryContainer = Color(0xFFFFE0E5), // Light Green
+    onTertiaryContainer = Color(0xFF41131C), // Dark Teal
     error = Color(0xFFBA1A1A), // Red
     errorContainer = Color(0xFFFFDAD6), // Light Red
     onError = Color(0xFFFFFFFF), // White
@@ -71,12 +71,12 @@ private val DarkColor = darkColorScheme(
     onPrimaryContainer = Color(0xFFE0E0E0), // Light Gray
     secondary = Color(0xFFf97910), // Orange
     onSecondary = Color(0xFF4E2600), // Dark Brown
-    secondaryContainer = Color(0xFF6F3800), // Brown
-    onSecondaryContainer = Color(0xFFFFE8D6), // Pale Orange
-    tertiary = Color(0xFF83D6B5), // Mint Green
-    onTertiary = Color(0xFF00382E), // Dark Teal
-    tertiaryContainer = Color(0xFF005143), // Teal
-    onTertiaryContainer = Color(0xFFA0F2D0), // Light Green
+    secondaryContainer = Color(0xFF511D29), // Brown
+    onSecondaryContainer = Color(0xFFFFE4E8), // Pale Orange
+    tertiary = Color(0xFFCAA4AD), // Mint Green
+    onTertiary = Color(0xFF2A1219), // Dark Teal
+    tertiaryContainer = Color(0xFF47202B), // Teal
+    onTertiaryContainer = Color(0xFFF2DCE1), // Light Green
     error = Color(0xFFFFB4AB), // Light Red
     errorContainer = Color(0xFF93000A), // Dark Red
     onError = Color(0xFF690005), // Deep Red
@@ -103,7 +103,7 @@ private val DarkColor = darkColorScheme(
 
 // Semantic Colors
 val colorPing = Color(0xFF009966) // Green
-val colorPingRed = Color(0xFFFF0099) // Pink Red
+val colorPingRed = Color(0xFFFF6478) // Pink Red
 val colorConfigType = Color(0xFFf97910) // Orange
 val colorFabActive = Color(0xFFf97910) // Orange
 val colorFabInactiveLight = Color(0xFF9C9C9C) // Gray
@@ -122,12 +122,12 @@ val toastTextColor = Color.White // White
 
 object ThemeManager {
     private val _themeMode = MutableStateFlow(
-        MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "0") ?: "0"
+        MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "2") ?: "2"
     )
     val themeMode: StateFlow<String> = _themeMode.asStateFlow()
 
     private val _dynamicColorEnabled = MutableStateFlow(
-        MmkvManager.decodeSettingsBool(AppConfig.PREF_DYNAMIC_COLOR, true)
+        MmkvManager.decodeSettingsBool(AppConfig.PREF_DYNAMIC_COLOR, false)
     )
     val dynamicColorEnabled: StateFlow<Boolean> = _dynamicColorEnabled.asStateFlow()
 
@@ -143,7 +143,7 @@ object ThemeManager {
 
     fun refresh() {
         _themeMode.value =
-            MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "0") ?: "0"
+            MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "2") ?: "2"
         _dynamicColorEnabled.value =
             MmkvManager.decodeSettingsBool(AppConfig.PREF_DYNAMIC_COLOR, true)
     }
