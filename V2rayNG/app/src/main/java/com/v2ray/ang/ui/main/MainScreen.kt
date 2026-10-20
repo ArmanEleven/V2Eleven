@@ -56,7 +56,6 @@ fun MainScreen(
     }
     val activeGroupState by activeGroupFlow.collectAsStateWithLifecycle()
     val activeServer = activeGroupState.rows.firstOrNull { it.guid == selectedGuid }
-    val activeServerIdentity = serverVisualIdentity(activeServer?.remarks.orEmpty())
     var selectedSectionName by rememberSaveable { mutableStateOf(V2ElevenSection.HOME.name) }
     val selectedSection = V2ElevenSection.valueOf(selectedSectionName)
     val drawerState = rememberDrawerState(DrawerValue.Closed)

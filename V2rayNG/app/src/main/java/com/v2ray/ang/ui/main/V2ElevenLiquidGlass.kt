@@ -19,8 +19,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -118,6 +121,7 @@ fun V2ElevenTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(Brush.verticalGradient(listOf(Color(0xF70A0A0E), Color(0xE9101015))))
+            .statusBarsPadding()
             .padding(horizontal = 15.dp, vertical = 10.dp)
             .padding(top = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -315,6 +319,7 @@ fun V2ElevenHomePage(
                     listOf(Color(0xFF07080B), Color(0xFF101015), Color(0xFF170C12), Color(0xFF08090D))
                 )
             )
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 21.dp, vertical = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)

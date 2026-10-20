@@ -330,6 +330,7 @@ private fun ServerListItem(
         row.testDelayMillis > 70L -> Color(0xFFD3CAD0)
         else -> Color(0xFFAAA6B0)
     }
+    val selectedDescription = if (isSelected) stringResource(R.string.acc_selected_server) else null
     var menuExpanded by remember(row.guid) { mutableStateOf(false) }
 
     Surface(
@@ -348,7 +349,7 @@ private fun ServerListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
-                    if (isSelected) stateDescription = stringResource(R.string.acc_selected_server)
+                    if (selectedDescription != null) stateDescription = selectedDescription
                 }
                 .clickable { actions.select(row.guid) }
                 .padding(horizontal = 14.dp, vertical = 14.dp),
