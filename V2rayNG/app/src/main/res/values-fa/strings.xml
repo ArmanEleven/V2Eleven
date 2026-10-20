@@ -561,4 +561,36 @@
     <string name="connection_test_empty_message">جزئیاتی در دسترس نیست</string>
     <string name="value_unknown">ناشناخته</string>
 
+    <string name="v2eleven_nav_subscription">اشتراک</string>
+    <string name="v2eleven_nav_gaming">گیمینگ</string>
+    <string name="v2eleven_nav_browsing">وب‌گردی</string>
+    <string name="v2eleven_subscription_eyebrow" translatable="false">ELEVEN NETWORK</string>
+    <string name="v2eleven_subscription_title">اشتراک شما</string>
+    <string name="v2eleven_subscription_not_added">هنوز اشتراکی اضافه نشده</string>
+    <string name="v2eleven_subscription_added">اشتراک ذخیره شده</string>
+    <string name="v2eleven_subscription_add_hint">لینک اشتراک را وارد کنید تا سرورها بارگذاری شوند</string>
+    <string name="v2eleven_subscription_saved_hint">لینک اشتراک روی همین دستگاه ذخیره شده است</string>
+    <string name="v2eleven_status_added">ثبت شد</string>
+    <string name="v2eleven_usage_title">حجم باقی‌مانده</string>
+    <string name="v2eleven_expiry_title">زمان انقضا</string>
+    <string name="v2eleven_data_unavailable">در دسترس نیست</string>
+    <string name="v2eleven_metadata_note">حجم و زمان انقضا فقط وقتی نمایش داده می‌شوند که ارائه‌دهنده اشتراک اطلاعات معتبر مصرف را ارائه کند.</string>
+    <string name="v2eleven_update_subscription">به‌روزرسانی اشتراک</string>
+    <string name="v2eleven_link_title">اتصال اشتراک</string>
+    <string name="v2eleven_link_description">لینک اشتراکی را که از الون دریافت کرده‌اید وارد کنید.</string>
+    <string name="v2eleven_subscription_url">لینک اشتراک</string>
+    <string name="v2eleven_subscription_placeholder">https://…</string>
+    <string name="v2eleven_clipboard_empty">کلیپ‌بورد خالی است. ابتدا لینک اشتراک را کپی کنید.</string>
+    <string name="v2eleven_paste_link">چسباندن لینک</string>
+    <string name="v2eleven_save_link">ثبت لینک</string>
+    <string name="v2eleven_no_link_title">لینک سابسکریپشن ندارید؟</string>
+    <string name="v2eleven_no_link_description">برای خرید یا تمدید سرویس، ربات الون را باز کنید.</string>
+    <string name="v2eleven_get_link">خرید یا تمدید از ربات</string>
+    <string name="v2eleven_support">ارتباط با پشتیبانی</string>
+    <string name="v2eleven_no_gaming">سرور گیمینگ ترکیه‌ای پیدا نشد</string>
+    <string name="v2eleven_no_browsing">سرور وب‌گردی پیدا نشد</string>
+    <string name="v2eleven_no_servers_hint">اشتراک را اضافه یا به‌روزرسانی کنید تا سرورهای این بخش بارگذاری شوند.</string>
+    <string name="v2eleven_go_subscription">رفتن به صفحه اشتراک</string>
+    <string name="v2eleven_invalid_url">این آدرس، لینک اشتراک معتبر به نظر نمی‌رسد.</string>
+
 </resources>
