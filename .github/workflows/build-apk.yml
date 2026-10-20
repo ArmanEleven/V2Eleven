@@ -1,0 +1,92 @@
+name: Build v2Eleven APK
+
+on:
+  push:
+    branches:
+      - feat/v2eleven-ui-redesign
+    paths:
+      - ".github/workflows/build-apk.yml"
+      - "V2rayNG/**"
+      - "AndroidLibXrayLite"
+      - "hev-socks5-tunnel"
+      - ".gitmodules"
+      - "compile-hevtun.sh"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v2eleven-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build installable debug APKs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          cmdline-tools-version: "14742923"
+          packages: "platforms;android-37.0 build-tools;37.0.0 platform-tools"
+          log-accepted-android-sdk-licenses: false
+
+      - name: Install Android NDK
+        shell: bash
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --channel=0 --install "ndk;30.0.16248370"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/30.0.16248370" >> "$GITHUB_ENV"
+
+      - name: Build native tunnel libraries
+        shell: bash
+        run: |
+          bash compile-hevtun.sh
+          mkdir -p V2rayNG/app/libs
+          cp -R libs/. V2rayNG/app/libs/
+
+      - name: Find matching Xray library release
+        id: xray
+        shell: bash
+        run: |
+          cd AndroidLibXrayLite
+          tag="$(git describe --tags --abbrev=0)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Using AndroidLibXrayLite release: $tag"
+
+      - name: Download Xray Android library
+        uses: robinraju/release-downloader@v1.13
+        with:
+          repository: "2dust/AndroidLibXrayLite"
+          tag: ${{ steps.xray.outputs.tag }}
+          fileName: "libv2ray.aar"
+          out-file-path: "V2rayNG/app/libs/"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+          cache-dependency-path: V2rayNG/gradle/libs.versions.toml
+
+      - name: Build debug APK
+        working-directory: V2rayNG
+        shell: bash
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          chmod +x gradlew
+          ./gradlew --no-daemon assemblePlaystoreDebug
+
+      - name: Upload APK files
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2Eleven-debug-apks
+          path: V2rayNG/app/build/outputs/apk/playstore/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
