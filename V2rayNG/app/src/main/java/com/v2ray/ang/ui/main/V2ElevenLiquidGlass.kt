@@ -304,6 +304,14 @@ fun V2ElevenHomePage(
     onOpenSubscription: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val hasConnectionError = statusText.contains("fail", ignoreCase = true) ||
+        statusText.contains("error", ignoreCase = true) ||
+        statusText.contains("ناموفق") || statusText.contains("خطا")
+    val statusColor = when {
+        hasConnectionError -> Color(0xFFFF5964)
+        isRunning -> Color(0xFF55D887)
+        else -> GlassMuted
+    }
     val transition = rememberInfiniteTransition(label = "eleven-orbit")
     val pulse by transition.animateFloat(
         initialValue = 0.965f,
@@ -362,14 +370,18 @@ fun V2ElevenHomePage(
             }
             Surface(
                 shape = RoundedCornerShape(22.dp),
-                color = if (isRunning) Color(0xFF5D1C2B).copy(alpha = 0.64f) else Color.White.copy(alpha = 0.055f),
+                color = when {
+                    hasConnectionError -> Color(0xFF4A151C).copy(alpha = 0.82f)
+                    isRunning -> Color(0xFF173321).copy(alpha = 0.82f)
+                    else -> Color.White.copy(alpha = 0.055f)
+                },
                 border = BorderStroke(1.dp, Color.White.copy(alpha = 0.11f))
             ) {
                 Text(
                     statusText,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (isRunning) Color(0xFFFFAAB5) else GlassMuted,
+                    color = statusColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
