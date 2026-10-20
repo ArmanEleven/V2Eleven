@@ -45,6 +45,9 @@ sealed interface MainAction {
     data object RemoveInvalidServers : MainAction
     data object SortByTestResults : MainAction
     data object UpdateSubscriptions : MainAction
+    data class AddSubscriptionFromUrl(val url: String) : MainAction
+    data object OpenRenewalBot : MainAction
+    data object OpenSupportContact : MainAction
     data object ExportAll : MainAction
 
     data object ImportQRcode : MainAction
