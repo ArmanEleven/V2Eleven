@@ -47,6 +47,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -296,6 +298,7 @@ fun V2ElevenHomePage(
     selectedServerFlag: String,
     selectedServerPingMillis: Long,
     onToggleConnection: () -> Unit,
+    onAutoSelectBestServer: () -> Unit,
     onTestPing: () -> Unit,
     onOpenGaming: () -> Unit,
     onOpenSubscription: () -> Unit,
@@ -316,9 +319,22 @@ fun V2ElevenHomePage(
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(Color(0xFF07080B), Color(0xFF101015), Color(0xFF170C12), Color(0xFF08090D))
+                    listOf(Color(0xFF030407), Color(0xFF0B0B11), Color(0xFF210A13), Color(0xFF07070B))
                 )
             )
+            .drawBehind {
+                // Upside-Down inspired branching silhouettes, kept subtle behind glass cards.
+                val vein = Color(0xFF8F263D).copy(alpha = 0.24f)
+                val dimVein = Color(0xFFB8A5AE).copy(alpha = 0.075f)
+                for (index in 0..6) {
+                    val y = size.height * (0.12f + index * 0.125f)
+                    val offset = size.height * (0.035f + index * 0.006f)
+                    drawLine(vein, Offset(0f, y), Offset(size.width * 0.12f, y + offset), strokeWidth = 2.0f)
+                    drawLine(vein, Offset(size.width * 0.12f, y + offset), Offset(size.width * 0.19f, y - offset * 0.7f), strokeWidth = 1.2f)
+                    drawLine(dimVein, Offset(size.width, y + offset), Offset(size.width * 0.88f, y - offset), strokeWidth = 1.5f)
+                    drawLine(dimVein, Offset(size.width * 0.88f, y - offset), Offset(size.width * 0.82f, y + offset * 0.8f), strokeWidth = 1.0f)
+                }
+            }
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 21.dp, vertical = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -437,6 +453,19 @@ fun V2ElevenHomePage(
             )
         }
 
+        Button(
+            onClick = onAutoSelectBestServer,
+            modifier = Modifier.fillMaxWidth().height(48.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF14271D).copy(alpha = 0.92f),
+                contentColor = Color(0xFFB8F6CD)
+            ),
+            border = BorderStroke(1.dp, Color(0xFF55D887).copy(alpha = 0.38f))
+        ) {
+            Text("انتخاب خودکار بهترین سرور", fontWeight = FontWeight.SemiBold)
+        }
+
         Surface(
             modifier = Modifier.fillMaxWidth().clickable(onClick = onOpenGaming),
             shape = RoundedCornerShape(28.dp),
@@ -471,7 +500,7 @@ fun V2ElevenHomePage(
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     Text(
                         if (selectedServerPingMillis > 0L) "$selectedServerPingMillis ms" else "— ms",
-                        color = if (selectedServerPingMillis > 0L) ElevenRed else GlassMuted,
+                        color = if (selectedServerPingMillis > 0L) Color(0xFF55D887) else GlassMuted,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold
                     )
