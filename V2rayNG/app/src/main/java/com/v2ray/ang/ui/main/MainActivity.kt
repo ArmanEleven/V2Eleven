@@ -243,8 +243,10 @@ class MainActivity : HelperBaseComponentActivity() {
             return
         }
 
+        // Reuse the empty default subscription on the first import instead of creating a duplicate.
         val existing = mainViewModel.getSubscriptions()
-            .lastOrNull { it.subscription.url.isNotBlank() }
+            .firstOrNull { it.subscription.url.isBlank() }
+            ?: mainViewModel.getSubscriptions().lastOrNull { it.subscription.url.isNotBlank() }
         val subscriptionId = existing?.guid ?: Utils.getUuid()
         val subscription = existing?.subscription ?: SubscriptionItem()
 
@@ -256,7 +258,8 @@ class MainActivity : HelperBaseComponentActivity() {
         SettingsChangeManager.makeSetupGroupTab()
         mainViewModel.onAction(MainAction.RefreshGroups)
         SubscriptionUpdater.syncOne(subId = subscriptionId)
-        toastSuccess(R.string.toast_success)
+        // Perform the first fetch immediately; later retries are user-triggered from the subscription page.
+        mainViewModel.updateSubscriptionNow(subscriptionId)
     }
 
     private fun importConfigLocal() {
