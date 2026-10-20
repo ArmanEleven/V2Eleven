@@ -216,9 +216,10 @@ fun MainScreen(
                             scope.launch {
                                 isAutoSelectingBest = true
                                 try {
-                                    val bestGuid = mainViewModel.autoSelectBestServer()
-                                    if (bestGuid != null) {
-                                        onAction(MainAction.SelectServer(bestGuid))
+                                    val bestServer = mainViewModel.autoSelectBestServer()
+                                    if (bestServer != null) {
+                                        onAction(MainAction.SelectGroup(bestServer.first))
+                                        onAction(MainAction.SelectServer(bestServer.second))
                                         if (!mainViewModel.uiState.value.isRunning) {
                                             onAction(MainAction.ToggleService)
                                         }
