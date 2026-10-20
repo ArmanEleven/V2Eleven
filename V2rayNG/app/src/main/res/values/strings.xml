@@ -565,7 +565,7 @@
     <string name="v2eleven_nav_gaming">Gaming</string>
     <string name="v2eleven_nav_browsing">Web</string>
     <string name="v2eleven_subscription_eyebrow" translatable="false">ELEVEN NETWORK</string>
-    <string name="v2eleven_subscription_title">Your subscription</string>
+    <string name="v2eleven_subscription_title">Add subscription</string>
     <string name="v2eleven_subscription_not_added">No subscription added yet</string>
     <string name="v2eleven_subscription_added">Subscription saved</string>
     <string name="v2eleven_subscription_add_hint">Add your subscription link to load your servers</string>
@@ -576,7 +576,7 @@
     <string name="v2eleven_data_unavailable">Unavailable</string>
     <string name="v2eleven_metadata_note">Traffic and expiry appear here only when your subscription provider supplies reliable usage data.</string>
     <string name="v2eleven_update_subscription">Update subscription</string>
-    <string name="v2eleven_link_title">Connect your subscription</string>
+    <string name="v2eleven_link_title">Subscription link</string>
     <string name="v2eleven_link_description">Paste the single subscription link you received from Eleven.</string>
     <string name="v2eleven_subscription_url">Subscription URL</string>
     <string name="v2eleven_subscription_placeholder">https://…</string>
