@@ -246,7 +246,6 @@ class MainActivity : HelperBaseComponentActivity() {
         // Reuse the empty default subscription on the first import instead of creating a duplicate.
         val existing = mainViewModel.getSubscriptions()
             .firstOrNull { it.subscription.url.isBlank() }
-            ?: mainViewModel.getSubscriptions().lastOrNull { it.subscription.url.isNotBlank() }
         val subscriptionId = existing?.guid ?: Utils.getUuid()
         val subscription = existing?.subscription ?: SubscriptionItem()
 
