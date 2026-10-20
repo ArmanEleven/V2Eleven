@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -878,6 +879,35 @@ class MainViewModel(
             }
             dataSource.sendMsg2TestService(message, request.id)
         }
+    }
+
+    /**
+     * Measures the real v2rayNG delay for every server in the active subscription twice,
+     * then returns the server with the lowest mean of successful measurements.
+     * Failed measurements are excluded; no reachable server means no automatic selection.
+     */
+    suspend fun autoSelectBestServer(): String? {
+        val groupId = uiState.value.selectedGroupId
+        val serverGuids = currentServers().map { it.guid }.distinct()
+        if (serverGuids.isEmpty()) return null
+
+        val samples = serverGuids.associateWith { mutableListOf<Long>() }
+        repeat(2) {
+            testAllRealPing(onlyTcp = false)
+            uiState.first { !it.isTesting }
+            // Let the final batched result flush into the group cache before reading it.
+            kotlinx.coroutines.delay(250)
+            val latest = mutableServerGroupState(groupId).value.servers.associate { it.guid to it.testDelayMillis }
+            serverGuids.forEach { guid ->
+                val measured = latest[guid] ?: dataSource.decodeAffiliationInfo(guid)?.testDelayMillis ?: 0L
+                if (measured > 0L) samples[guid]?.add(measured)
+            }
+        }
+
+        return samples.entries
+            .filter { it.value.isNotEmpty() }
+            .minByOrNull { (_, values) -> values.average() }
+            ?.key
     }
 
     fun testServerRealPing(guid: String) {
