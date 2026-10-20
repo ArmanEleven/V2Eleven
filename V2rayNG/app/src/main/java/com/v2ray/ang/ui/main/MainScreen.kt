@@ -51,6 +51,8 @@ fun MainScreen(
     val shareQRCodeBitmap = uiState.shareQRCodeBitmap
 
     val isDarkTheme = LocalDarkTheme.current
+    var selectedSectionName by rememberSaveable { mutableStateOf(V2ElevenSection.SUBSCRIPTION.name) }
+    val selectedSection = V2ElevenSection.valueOf(selectedSectionName)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var showSearch by remember { mutableStateOf(false) }
@@ -185,18 +187,34 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                MainBottomBar(
-                    displayText = displayText,
-                    isRunning = isRunning,
-                    isDarkTheme = isDarkTheme,
-                    onAction = onAction
-                )
+                Column {
+                    MainBottomBar(
+                        displayText = displayText,
+                        isRunning = isRunning,
+                        isDarkTheme = isDarkTheme,
+                        onAction = onAction
+                    )
+                    V2ElevenNavigationBar(
+                        selected = selectedSection,
+                        onSelect = { selectedSectionName = it.name }
+                    )
+                }
             },
             floatingActionButton = {},
         ) { innerPadding ->
-            val layoutDirection = LocalLayoutDirection.current
-
-            if (groups.isNotEmpty()) {
+            if (selectedSection == V2ElevenSection.SUBSCRIPTION) {
+                V2ElevenSubscriptionPage(
+                    subscriptions = mainViewModel.getSubscriptions(),
+                    onAddSubscription = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
+                    onRenewalClick = { onAction(MainAction.OpenRenewalBot) },
+                    onSupportClick = { onAction(MainAction.OpenSupportContact) },
+                    onPasteLink = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
+                    onUpdateClick = { onAction(MainAction.UpdateSubscriptions) },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
+            } else if (groups.isNotEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -245,15 +263,29 @@ fun MainScreen(
                                 shareTarget = Triple(guid, profile, true)
                             },
                             onRemoveServer = removeServer,
+                            serverCategory = if (selectedSection == V2ElevenSection.GAMING) {
+                                V2ElevenServerCategory.TURKEY_GAMING
+                            } else {
+                                V2ElevenServerCategory.WEB_BROWSING
+                            },
                             contentPadding = PaddingValues(
                                 start = 0.dp,
                                 top = 0.dp,
                                 end = 0.dp,
-                                bottom = 80.dp
+                                bottom = 150.dp
                             )
                         )
                     }
                 }
+            } else {
+                V2ElevenEmptyServersPage(
+                    section = selectedSection,
+                    onGoToSubscription = { selectedSectionName = V2ElevenSection.SUBSCRIPTION.name },
+                    onRenewalClick = { onAction(MainAction.OpenRenewalBot) },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
             }
         }
     }
