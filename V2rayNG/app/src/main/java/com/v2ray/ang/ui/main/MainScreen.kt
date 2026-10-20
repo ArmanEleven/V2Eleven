@@ -231,7 +231,7 @@ fun MainScreen(
                     onAddSubscription = { url -> onAction(MainAction.AddSubscriptionFromUrl(url)) },
                     onRetrySubscriptionUpdate = {
                         mainViewModel.getSubscriptions()
-                            .firstOrNull { it.subscription.url.isNotBlank() }
+                            .lastOrNull { it.subscription.url.isNotBlank() }
                             ?.guid
                             ?.let { mainViewModel.updateSubscriptionNow(it) }
                     },
