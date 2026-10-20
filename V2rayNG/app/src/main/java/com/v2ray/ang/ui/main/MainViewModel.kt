@@ -875,10 +875,10 @@ class MainViewModel(
         }
     }
 
-    fun testAllRealPing(onlyTcp: Boolean = false) {
+    fun testAllRealPing(onlyTcp: Boolean = false, groupOverride: String? = null) {
         cancelAllPing()
-        val groupId = uiState.value.selectedGroupId
-        val servers = currentServers()
+        val groupId = groupOverride ?: uiState.value.selectedGroupId
+        val servers = if (groupOverride == null) currentServers() else mutableServerGroupState(groupId).value.servers
         if (servers.isEmpty()) {
             return
         }
@@ -930,23 +930,34 @@ class MainViewModel(
      * then returns the server with the lowest mean of successful measurements.
      * Failed measurements are excluded; no reachable server means no automatic selection.
      */
-    suspend fun autoSelectBestServer(): String? {
-        val groupId = uiState.value.selectedGroupId
-        val serverGuids = currentServers().map { it.guid }.distinct()
-        if (serverGuids.isEmpty()) return null
+    suspend fun autoSelectBestServer(): Pair<String, String>? {
+        val groupIds = uiState.value.groups.map { it.id }
+            .ifEmpty { listOf(uiState.value.selectedGroupId).filter { it.isNotBlank() } }
+        if (groupIds.isEmpty()) return null
 
-        val samples = serverGuids.associateWith { mutableListOf<Long>() }
-        repeat(2) {
-            testAllRealPing(onlyTcp = false)
-            uiState.first { !it.isTesting }
-            // Let the final batched result flush into the group cache before reading it.
-            kotlinx.coroutines.delay(250)
-            val latest = mutableServerGroupState(groupId).value.servers.associate { it.guid to it.testDelayMillis }
-            serverGuids.forEach { guid ->
-                val measured = latest[guid]?.takeIf { it > 0L }
-                    ?: dataSource.decodeAffiliationInfo(guid)?.testDelayMillis
-                    ?: 0L
-                if (measured > 0L) samples[guid]?.add(measured)
+        val samples = mutableMapOf<Pair<String, String>, MutableList<Long>>()
+        for (groupId in groupIds) {
+            var servers = mutableServerGroupState(groupId).value.servers
+            if (servers.isEmpty()) {
+                servers = loadGroup(groupId, forceRefresh = false)
+                updateGroupUi(groupId, servers)
+            }
+            val serverGuids = servers.map { it.guid }.distinct()
+            if (serverGuids.isEmpty()) continue
+            serverGuids.forEach { guid -> samples[groupId to guid] = mutableListOf() }
+
+            repeat(2) {
+                testAllRealPing(onlyTcp = false, groupOverride = groupId)
+                uiState.first { !it.isTesting }
+                // Allow the final batched result to reach the cache/persistent affiliation store.
+                kotlinx.coroutines.delay(250)
+                val latest = mutableServerGroupState(groupId).value.servers.associate { it.guid to it.testDelayMillis }
+                serverGuids.forEach { guid ->
+                    val measured = latest[guid]?.takeIf { it > 0L }
+                        ?: dataSource.decodeAffiliationInfo(guid)?.testDelayMillis
+                        ?: 0L
+                    if (measured > 0L) samples[groupId to guid]?.add(measured)
+                }
             }
         }
 
