@@ -233,7 +233,7 @@ fun MainScreen(
                         mainViewModel.getSubscriptions()
                             .lastOrNull { it.subscription.url.isNotBlank() }
                             ?.guid
-                            ?.let { mainViewModel.updateSubscriptionNow(it) }
+                            ?.let { mainViewModel.updateSubscriptionNow(it, isManualRetry = true) }
                     },
                     onOpenSupport = { onAction(MainAction.OpenSupportContact) },
                     modifier = Modifier
