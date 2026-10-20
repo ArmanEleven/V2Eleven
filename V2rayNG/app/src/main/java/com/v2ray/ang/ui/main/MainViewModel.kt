@@ -567,11 +567,14 @@ class MainViewModel(
         }
     }
 
-    fun updateSubscriptionNow(subscriptionId: String) {
-        importConfigViaSub(subscriptionId)
+    fun updateSubscriptionNow(subscriptionId: String, isManualRetry: Boolean = false) {
+        importConfigViaSub(subscriptionId, isManualRetry)
     }
 
-    private fun importConfigViaSub(subscriptionId: String? = null) {
+    private fun importConfigViaSub(
+        subscriptionId: String? = null,
+        isManualRetry: Boolean = false
+    ) {
         val subId = subscriptionId ?: uiState.value.selectedGroupId
         launchLoading {
             withContext(ioDispatcher) {
@@ -585,6 +588,12 @@ class MainViewModel(
                     when {
                         result.successCount + result.failureCount + result.skipCount == 0 ->
                             toast(R.string.title_update_subscription_no_subscription)
+
+                        result.successCount == 0 && result.failureCount > 0 && isManualRetry ->
+                            toast("تلاش مجدد هم ناموفق بود؛ لطفاً با پشتیبانی تماس بگیر.")
+
+                        result.successCount == 0 && result.failureCount > 0 ->
+                            toast("بروزرسانی ناموفق بود؛ VPN را وصل کن و سپس «تلاش مجدد» را بزن.")
 
                         result.successCount > 0 && result.failureCount + result.skipCount == 0 ->
                             toast(
