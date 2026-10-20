@@ -76,13 +76,18 @@ fun GroupPagerPage(
     onShareServer: (String, ProfileItem) -> Unit,
     onMoreServer: (String, ProfileItem) -> Unit,
     onRemoveServer: (String, String) -> Unit,
+    serverCategory: V2ElevenServerCategory = V2ElevenServerCategory.ALL,
     contentPadding: PaddingValues
 ) {
     val groupStateFlow = remember(groupId) {
         mainViewModel.serverGroupState(groupId)
     }
     val groupState by groupStateFlow.collectAsStateWithLifecycle()
-    val canReorder = groupId.isNotEmpty() && searchQuery.isEmpty()
+    val visibleRows = remember(groupState.rows, serverCategory) {
+        groupState.rows.filter { serverCategory.matches(it.profile) }
+    }
+    val canReorder = groupId.isNotEmpty() && searchQuery.isEmpty() &&
+            serverCategory == V2ElevenServerCategory.ALL
     val actions = remember(
         onSelectServer,
         onEditServer,
@@ -99,7 +104,7 @@ fun GroupPagerPage(
         )
     }
     ServerListPage(
-        rows = groupState.rows,
+        rows = visibleRows,
         selectedGuid = selectedGuid,
         locateTarget = locateTarget?.takeIf { it.groupId == groupId },
         canReorder = canReorder,
