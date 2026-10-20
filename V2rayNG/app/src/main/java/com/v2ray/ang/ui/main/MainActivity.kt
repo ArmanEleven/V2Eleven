@@ -15,6 +15,7 @@ import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.core.LauncherManager
 import com.v2ray.ang.dto.entities.ProfileItem
+import com.v2ray.ang.dto.entities.SubscriptionItem
 import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.enums.PermissionType
 import com.v2ray.ang.extension.toast
@@ -24,6 +25,7 @@ import com.v2ray.ang.handler.AngConfigManager
 import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.handler.SettingsChangeManager
 import com.v2ray.ang.handler.SettingsManager
+import com.v2ray.ang.handler.SubscriptionUpdater
 import com.v2ray.ang.ui.AboutActivity
 import com.v2ray.ang.ui.backup.BackupActivity
 import com.v2ray.ang.ui.base.HelperBaseComponentActivity
@@ -109,6 +111,9 @@ class MainActivity : HelperBaseComponentActivity() {
                     MainAction.ImportQRcode -> importQRcode()
                     MainAction.ImportClipboard -> importClipboard()
                     MainAction.ImportConfigLocal -> importConfigLocal()
+                    is MainAction.AddSubscriptionFromUrl -> addSubscriptionFromUrl(action.url)
+                    MainAction.OpenRenewalBot -> Utils.openUri(this, "https://t.me/ElevenPing")
+                    MainAction.OpenSupportContact -> Utils.openUri(this, "https://t.me/ElevenJT")
                     is MainAction.ImportManually -> importManually(action.type)
                     MainAction.RestartService -> LauncherManager.restartServiceOrStart(this, ::requestServiceStart)
                     MainAction.LocateSelectedServer -> mainViewModel.triggerLocateSelectedServer()
@@ -229,6 +234,29 @@ class MainActivity : HelperBaseComponentActivity() {
         } catch (e: Exception) {
             LogUtil.e(AppConfig.TAG, "Failed to import config from clipboard", e)
         }
+    }
+
+    private fun addSubscriptionFromUrl(rawUrl: String) {
+        val url = rawUrl.trim()
+        if (!Utils.isValidUrl(url) || !Utils.isValidSubUrl(url)) {
+            toastError(R.string.v2eleven_invalid_url)
+            return
+        }
+
+        val existing = mainViewModel.getSubscriptions()
+            .lastOrNull { it.subscription.url.isNotBlank() }
+        val subscriptionId = existing?.guid ?: Utils.getUuid()
+        val subscription = existing?.subscription ?: SubscriptionItem()
+
+        subscription.remarks = "v2Eleven"
+        subscription.url = url
+        subscription.enabled = true
+
+        MmkvManager.encodeSubscription(subscriptionId, subscription)
+        SettingsChangeManager.makeSetupGroupTab()
+        mainViewModel.onAction(MainAction.RefreshGroups)
+        SubscriptionUpdater.syncOne(subId = subscriptionId)
+        toastSuccess(R.string.toast_success)
     }
 
     private fun importConfigLocal() {
