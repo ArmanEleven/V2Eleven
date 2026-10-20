@@ -65,6 +65,7 @@ fun MainScreen(
     var showDelAllConfirm by remember { mutableStateOf(false) }
     var showDelDuplicateConfirm by remember { mutableStateOf(false) }
     var showDelInvalidConfirm by remember { mutableStateOf(false) }
+    var isAutoSelectingBest by remember { mutableStateOf(false) }
     var showRemoveConfirm by rememberSaveable(stateSaver = ServerDeleteTarget.Saver) {
         mutableStateOf<ServerDeleteTarget?>(null)
     }
@@ -211,16 +212,24 @@ fun MainScreen(
                     selectedServerPingMillis = activeServer?.testDelayMillis ?: 0L,
                     onToggleConnection = { onAction(MainAction.ToggleService) },
                     onAutoSelectBestServer = {
-                        scope.launch {
-                            val bestGuid = mainViewModel.autoSelectBestServer()
-                            if (bestGuid != null) {
-                                onAction(MainAction.SelectServer(bestGuid))
-                                if (!mainViewModel.uiState.value.isRunning) {
-                                    onAction(MainAction.ToggleService)
+                        if (!isAutoSelectingBest) {
+                            scope.launch {
+                                isAutoSelectingBest = true
+                                try {
+                                    val bestGuid = mainViewModel.autoSelectBestServer()
+                                    if (bestGuid != null) {
+                                        onAction(MainAction.SelectServer(bestGuid))
+                                        if (!mainViewModel.uiState.value.isRunning) {
+                                            onAction(MainAction.ToggleService)
+                                        }
+                                    }
+                                } finally {
+                                    isAutoSelectingBest = false
                                 }
                             }
                         }
                     },
+                    isAutoSelectingBest = isAutoSelectingBest,
                     onTestPing = { onAction(MainAction.TestRealAllServers) },
                     onOpenGaming = { selectedSectionName = V2ElevenSection.GAMING.name },
                     onOpenSubscription = { selectedSectionName = V2ElevenSection.SUBSCRIPTION.name },
