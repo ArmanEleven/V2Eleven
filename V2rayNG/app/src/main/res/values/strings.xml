@@ -585,7 +585,7 @@
     <string name="v2eleven_save_link">Save link</string>
     <string name="v2eleven_add_subscription">Add subscription</string>
     <string name="v2eleven_enter_subscription_url">Enter the subscription link first.</string>
-    <string name="v2eleven_no_link_title">Don't have a subscription link?</string>
+    <string name="v2eleven_no_link_title">Don\'t have a subscription link?</string>
     <string name="v2eleven_no_link_description">Open the Eleven bot to get started or renew your service.</string>
     <string name="v2eleven_get_link">Get or renew via bot</string>
     <string name="v2eleven_support">Contact support</string>
@@ -593,6 +593,6 @@
     <string name="v2eleven_no_browsing">No web-browsing servers</string>
     <string name="v2eleven_no_servers_hint">Add or refresh your subscription to load the servers for this section.</string>
     <string name="v2eleven_go_subscription">Open subscription page</string>
-    <string name="v2eleven_invalid_url">That doesn't look like a valid subscription URL.</string>
+    <string name="v2eleven_invalid_url">That doesn\'t look like a valid subscription URL.</string>
 
 </resources>
