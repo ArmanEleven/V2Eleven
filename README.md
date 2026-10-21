@@ -1,66 +1,28 @@
 # v2Eleven
 
-<p align="center">
-  <a href="https://github.com/ArmanEleven/V2Eleven/releases/latest"><img alt="Download latest release" src="https://img.shields.io/badge/Download-Latest%20Release-2ea44f?style=for-the-badge"></a>
-  <a href="https://github.com/ArmanEleven/V2Eleven/releases"><img alt="All releases" src="https://img.shields.io/badge/All-Releases-181717?style=for-the-badge&logo=github"></a>
-</p>
+**An Android client based on [v2rayNG](https://github.com/2dust/v2rayNG), with an Eleven identity.**
 
-<p align="center">فارسی · <a href="#english">English</a></p>
+v2Eleven is a customized Android client built on an existing open-source networking project. This repository focuses on the Eleven-branded app experience and related Android changes.
 
-## دانلود و انتشار
+## Downloads
 
-- **[دانلود آخرین نسخه پایدار](https://github.com/ArmanEleven/V2Eleven/releases/latest)**
-- **[مشاهده همه نسخه‌ها](https://github.com/ArmanEleven/V2Eleven/releases)**
-- [بیلدهای آزمایشی در GitHub Actions](https://github.com/ArmanEleven/V2Eleven/actions/workflows/build-apk.yml)
+- [Latest release](https://github.com/ArmanEleven/V2Eleven/releases/latest)
+- [All releases](https://github.com/ArmanEleven/V2Eleven/releases)
+- [GitHub Actions](https://github.com/ArmanEleven/V2Eleven/actions)
 
-> اگر هنوز Release منتشر نشده باشد، لینک نسخه پایدار APK قابل دانلودی ندارد. فایل‌های Actions برای آزمایش هستند و ممکن است منقضی شوند.
+A release page may not contain an APK until a release is published. Actions artifacts are testing builds and may expire.
 
-## درباره پروژه
+## Project status
 
-**v2Eleven** یک کلاینت اندرویدی سفارشی بر پایه پروژه متن‌باز [v2rayNG](https://github.com/2dust/v2rayNG) است. هدف آن حفظ هسته شبکه و پشتیبانی پروتکل‌های پروژه اصلی، همراه با تجربه‌ای ساده‌تر و هویت بصری Eleven است.
+The project is under development. Check release notes and the workflow run for the exact version and source commit before installing a build. Features may vary between versions and depend on the subscription data available to the app.
 
-### قابلیت‌ها و مسیر توسعه
+## Upstream and licensing
 
-- مسیرهای اشتراک، گیمینگ ترکیه و وب‌گردی
-- وارد کردن لینک اشتراک و دسته‌بندی سرورها بر اساس پرچم ترکیه یا نام کشور
-- نمایش حجم مصرفی و تاریخ انقضا، در صورت ارائه این اطلاعات توسط سرویس اشتراک
-- تمدید: [ElevenPing](https://t.me/ElevenPing)
-- پشتیبانی: [ElevenJT](https://t.me/ElevenJT)
-- طراحی تیره با الهام سینمایی و جزئیات Liquid Glass
+This project is based on [2dust/v2rayNG](https://github.com/2dust/v2rayNG). The upstream project uses GPL-3.0. Preserve applicable copyright notices and comply with the license's redistribution and source-code requirements when distributing derivative builds.
 
-## مجوز و پروژه اصلی
+Review the license files included in the repository and the exact upstream revision before redistribution.
 
-پروژه اصلی [2dust/v2rayNG](https://github.com/2dust/v2rayNG) تحت مجوز GPL-3.0 منتشر شده است. هنگام تغییر یا توزیع برنامه، اعلان‌های حق نشر، فایل‌های مجوز و تعهدات مربوط به انتشار کد منبع باید رعایت شوند.
+## Support
 
-نام برنامه و شناسه بسته موردنظر: `v2Eleven` و `ir.armaneleven.v2eleven`.
-
----
-
-<a id="english"></a>
-
-## English
-
-**v2Eleven** is a custom Android client based on the open-source [v2rayNG](https://github.com/2dust/v2rayNG) project. It aims to preserve the upstream networking engine and protocol support while introducing a focused experience and the Eleven visual identity.
-
-### Download
-
-- **[Download the latest stable release](https://github.com/ArmanEleven/V2Eleven/releases/latest)**
-- **[Browse all releases](https://github.com/ArmanEleven/V2Eleven/releases)**
-- [Preview testing builds on GitHub Actions](https://github.com/ArmanEleven/V2Eleven/actions/workflows/build-apk.yml)
-
-> If no release has been published yet, the stable-download link will not contain an installable APK. Actions artifacts are for testing and may expire.
-
-### Features and direction
-
-- Focused destinations for Subscription, Turkey Gaming, and Web Browsing
-- Import a subscription URL and categorize servers by Turkey flag or country name
-- Show traffic usage and expiry when provided by the subscription service
 - Renewal: [ElevenPing](https://t.me/ElevenPing)
 - Support: [ElevenJT](https://t.me/ElevenJT)
-- Dark, cinematic visual direction with restrained Liquid Glass styling
-
-### Upstream and license
-
-The upstream [2dust/v2rayNG](https://github.com/2dust/v2rayNG) project is licensed under GPL-3.0. Preserve applicable copyright notices, license files, and source-distribution obligations when modifying or redistributing the application.
-
-Planned app name and package identifier: `v2Eleven` and `ir.armaneleven.v2eleven`.
